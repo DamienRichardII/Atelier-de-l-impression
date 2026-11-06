@@ -3,10 +3,13 @@ export const site = {
   name: "L'Atelier de l'Impression",
   city: "Aulnay-sous-Bois",
   postalCode: "93600",
-  // À renseigner par le client (laisser vide tant que non validé)
+  // Coordonnées identiques à NOVRA (même gérant, mêmes locaux), reprises des mentions légales publiques de novra.paris.
+  // À faire valider par le client. Téléphone et horaires : non communiqués, volontairement laissés vides.
+  street: "26 ter rue Jules Princet",
+  address: "26 ter rue Jules Princet, 93600 Aulnay-sous-Bois",
+  email: "Novraurban@gmail.com",
+  instagram: { handle: "@novra_officiel", url: "https://www.instagram.com/novra_officiel/" },
   phone: "",
-  email: "",
-  address: "",
   hours: "",
   nav: [
     { href: "/", label: "Accueil" },
