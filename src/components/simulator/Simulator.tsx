@@ -18,6 +18,12 @@ const PreviewStage = dynamic(() => import("./PreviewStage").then((m) => m.Previe
 
 const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit", side: "Côté", "three-quarter": "Trois quarts" };
 
+const families = products.reduce<{ name: string; items: typeof products }[]>((acc, p) => {
+  const f = acc.find((x) => x.name === p.family);
+  if (f) f.items.push(p); else acc.push({ name: p.family, items: [p] });
+  return acc;
+}, []);
+
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
     <section className="border-b border-line py-6">
@@ -33,6 +39,7 @@ export function Simulator() {
   const initial = products.find((p) => p.id === params.get("produit")) ?? products[0];
   const [productId, setProductId] = useState(initial.id);
   const product = products.find((p) => p.id === productId)!;
+  const familyItems = products.filter((p) => p.family === product.family);
   const [color, setColor] = useState(product.colors[0]);
   const [face, setFace] = useState<Face>(
     (Object.keys(initial.faces).find((f) => !initial.colors[0].photos || initial.colors[0].photos[f as Face]) as Face) ?? "front",
@@ -119,11 +126,23 @@ export function Simulator() {
         <div>
           <Section n="01" title="Produit">
             <div className="grid grid-cols-3 gap-2">
-              {products.map((p) => (
-                <button key={p.id} onClick={() => pickProduct(p.id)} aria-pressed={p.id === productId}
-                  className={`rounded-xl border px-2 py-3 text-sm transition ${p.id === productId ? "border-black bg-black text-white" : "border-line hover:border-black"}`}>{p.name}</button>
-              ))}
+              {families.map((fam) => {
+                const on = fam.name === product.family;
+                return (
+                  <button key={fam.name} onClick={() => !on && pickProduct(fam.items[0].id)} aria-pressed={on}
+                    className={`rounded-xl border px-2 py-3 text-sm transition ${on ? "border-black bg-black text-white" : "border-line hover:border-black"}`}>{fam.name}</button>
+                );
+              })}
             </div>
+            {familyItems.length > 1 && (
+              <label className="mt-3 block text-sm">
+                <span className="mb-1 block text-xs uppercase tracking-widest text-muted">Modèle</span>
+                <select value={productId} onChange={(e) => pickProduct(e.target.value)}
+                  className="w-full rounded-xl border border-line bg-white px-3 py-3 text-sm outline-none focus:border-black">
+                  {familyItems.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+              </label>
+            )}
             {product.description && <p className="mt-3 text-sm">{product.description}</p>}
             <p className="mt-3 text-sm text-muted">
               {payOn && prices[product.id] ? `${eur(prices[product.id])} la pièce · achat en ligne, sans devis.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} · tarif indicatif, confirmé par devis.` : "Tarif sur devis."}
