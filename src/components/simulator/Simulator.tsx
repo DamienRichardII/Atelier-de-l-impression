@@ -14,7 +14,7 @@ const PreviewStage = dynamic(() => import("./PreviewStage").then((m) => m.Previe
   loading: () => <div className="aspect-[500/560] w-full animate-pulse rounded-3xl bg-mist" />,
 });
 
-const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit" };
+const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit", side: "Côté" };
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
