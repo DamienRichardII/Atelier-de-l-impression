@@ -1,0 +1,13 @@
+import { decide } from "./reconcile";
+import assert from "node:assert/strict";
+const o = { reference: "CMD-2026-ABC123", total_cents: 3000, payment_status: "pending" };
+const c = (x: object) => ({ id: "x", status: "PAID", amount: 30, currency: "EUR", checkout_reference: "CMD-2026-ABC123", ...x }) as never;
+assert.deepEqual(decide(o, c({})), { action: "set", status: "paid" });
+assert.equal(decide(o, c({ amount: 29.99 })).action, "alert");
+assert.equal(decide(o, c({ currency: "USD" })).action, "alert");
+assert.equal(decide(o, c({ checkout_reference: "AUTRE" })).action, "alert");
+assert.deepEqual(decide(o, c({ status: "FAILED" })), { action: "set", status: "failed" });
+assert.deepEqual(decide(o, c({ status: "EXPIRED" })), { action: "set", status: "expired" });
+assert.equal(decide(o, c({ status: "PENDING" })).action, "none");
+assert.equal(decide({ ...o, payment_status: "paid" }, c({ status: "FAILED" })).action, "none");
+console.log("reconcile: 8 cas OK");

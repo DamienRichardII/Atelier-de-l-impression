@@ -56,7 +56,7 @@ export function QuoteForm({ product, color, logos, originals, snapshot }: Props)
 
   return (
     <section id="devis" className="mt-12 scroll-mt-24">
-      <p className="eyebrow">05 — Quantités et devis</p>
+      <p className="eyebrow">06 — Quantités et devis</p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight">Demander un devis</h2>
       <p className="mt-1 text-sm text-muted">Votre configuration (produit, couleur, logo, position, aperçu) est jointe automatiquement.</p>
       <form onSubmit={submit} className="mt-6 grid gap-6 lg:grid-cols-2">

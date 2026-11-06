@@ -8,6 +8,7 @@ import type { LogoPlacement } from "@/lib/customization/types";
 import { loadLogoFile, removeWhiteBackground } from "@/lib/customization/svg";
 import type { PreviewHandle } from "./PreviewStage";
 import { QuoteForm } from "./QuoteForm";
+import { AddToCart } from "./AddToCart";
 
 const PreviewStage = dynamic(() => import("./PreviewStage").then((m) => m.PreviewStage), {
   ssr: false,
@@ -183,6 +184,7 @@ export function Simulator() {
         </div>
       </div>
 
+      <AddToCart product={product} color={color} logos={logos} originals={originals} snapshot={snapshot} />
       <QuoteForm product={product} color={color} logos={logos} originals={originals} snapshot={snapshot} preview={preview} />
     </div>
   );
