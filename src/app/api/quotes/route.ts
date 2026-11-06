@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import { quoteSchema, configSchema } from "@/lib/validation/quote";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { rateLimit } from "@/lib/rate-limit";
+import { emailQuote } from "@/lib/email/messages";
 import { sanitizeSvgServer } from "@/lib/customization/svg-server";
 
 const MAX_FILE = 10 * 1024 * 1024;
@@ -46,6 +47,7 @@ export async function POST(req: Request) {
   });
   if (error) return NextResponse.json({ error: "Enregistrement impossible." }, { status: 500 });
 
-  // TODO(email) : notifier l'atelier + confirmer au client via Resend (RESEND_API_KEY) — non testé tant que la clé n'est pas fournie.
+  // E-mails (atelier + client) : jamais bloquant, journalisé en cas d'échec.
+  await emailQuote({ reference, firstName, lastName, email, phone, company, delivery, address, comments, product: config.productId, color: config.color, sizes: config.sizes, filesCount: stored.length }).catch(() => {});
   return NextResponse.json({ reference });
 }
