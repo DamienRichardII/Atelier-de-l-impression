@@ -33,7 +33,11 @@ export async function POST(req: Request) {
     if (typeof value === "string" || !(value instanceof File) || value.size === 0) continue;
     if (value.size > MAX_FILE || !OK_TYPES.includes(value.type)) continue;
     let body: Buffer | string = Buffer.from(await value.arrayBuffer());
-    if (value.type === "image/svg+xml") body = sanitizeSvgServer(body.toString("utf8"));
+    if (value.type === "image/svg+xml") {
+      const clean = sanitizeSvgServer(body.toString("utf8"));
+      if (clean === null) continue; // SVG non sûr : ignoré, jamais stocké
+      body = clean;
+    }
     const safe = value.name.replace(/[^\w.-]/g, "_").slice(0, 80);
     const path = `${reference}/${key}-${safe}`;
     const { error } = await db.storage.from("atelier-quote-files").upload(path, body, { contentType: value.type, upsert: false });
