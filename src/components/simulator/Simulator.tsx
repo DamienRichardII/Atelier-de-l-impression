@@ -124,6 +124,7 @@ export function Simulator() {
                   className={`rounded-xl border px-2 py-3 text-sm transition ${p.id === productId ? "border-black bg-black text-white" : "border-line hover:border-black"}`}>{p.name}</button>
               ))}
             </div>
+            {product.description && <p className="mt-3 text-sm">{product.description}</p>}
             <p className="mt-3 text-sm text-muted">
               {payOn && prices[product.id] ? `${eur(prices[product.id])} la pièce · achat en ligne, sans devis.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} · tarif indicatif, confirmé par devis.` : "Tarif sur devis."}
             </p>

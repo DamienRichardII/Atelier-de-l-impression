@@ -16,7 +16,7 @@ export class SumUpError extends Error {
 export const sumupConfigured = () => Boolean(process.env.SUMUP_API_KEY && process.env.SUMUP_MERCHANT_CODE);
 
 async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const key = process.env.SUMUP_API_KEY;
+  const key = process.env.SUMUP_API_KEY?.trim().replace(/^Bearer\s+/i, ""); // tolère espaces / retour ligne / préfixe "Bearer" collés avec la clé
   if (!key) throw new SumUpError("SUMUP_API_KEY manquante", 500);
   const ctrl = new AbortController(); const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
   try {
@@ -24,7 +24,10 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
       ...init, signal: ctrl.signal, cache: "no-store",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", Accept: "application/json" },
     });
-    if (!res.ok) throw new SumUpError(`SumUp ${path} : HTTP ${res.status}`, res.status);
+    if (!res.ok) {
+      let detail = ""; try { const j = await res.json(); detail = ` — ${j.error_code ?? j.error_message ?? j.message ?? ""}`.slice(0, 120); } catch { /* pas de corps JSON */ }
+      throw new SumUpError(`SumUp ${path} : HTTP ${res.status}${detail}`, res.status);
+    }
     return (await res.json()) as T;
   } catch (e) {
     if (e instanceof SumUpError) throw e;
@@ -36,7 +39,7 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
 export async function createCheckout(p: {
   reference: string; amountCents: number; description: string; webhookUrl: string; redirectUrl: string; customerEmail?: string;
 }) {
-  const merchant = process.env.SUMUP_MERCHANT_CODE;
+  const merchant = process.env.SUMUP_MERCHANT_CODE?.trim();
   if (!merchant) throw new SumUpError("SUMUP_MERCHANT_CODE manquant", 500);
   return call<SumUpCheckout>("/checkouts", {
     method: "POST",

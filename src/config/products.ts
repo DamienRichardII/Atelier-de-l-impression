@@ -16,6 +16,8 @@ export interface ProductConfig {
   name: string;
   colors: ColorOption[];
   sizes: string[];
+  /** Fiche tissu communiquée par le client (affichée sous le choix du produit). */
+  description?: string;
   /** Zone imprimable par vue. `null` = vue de présentation (pas de placement de logo). */
   faces: Partial<Record<Face, PrintZone | null>>;
   /** Zoom max cohérent avec la résolution réelle des photos (au-delà : pixellisation). */
@@ -37,16 +39,102 @@ export const formatPriceFrom = (n: number) =>
 
 export const products: ProductConfig[] = [
   {
-    id: "t-shirt", name: "T-shirt",
-    colors: [{ name: "Noir", hex: "#111111", photos: ph("t-shirt", "noir", ["front", "back", "left", "right"]) }],
+    id: "t-shirt", name: "T-shirt Unisex",
+    description: "T-shirt col rond lycra, manches courtes, 190-200 g/m².",
+    colors: [
+      { name: "Noir", hex: "#111111", photos: ph("t-shirt", "noir", ["front", "back", "left", "right"]) },
+      { name: "Naturel", hex: "#F8F5F0", photos: ph("t-shirt", "naturel", ["front"]) },
+      { name: "Blanc chiné", hex: "#E5E6EB", photos: ph("t-shirt", "blanc-chine", ["front"]) },
+      { name: "Rouge", hex: "#E73A37", photos: ph("t-shirt", "rouge", ["front"]) },
+      { name: "Bleu", hex: "#4D64A7", photos: ph("t-shirt", "bleu", ["front"]) },
+      { name: "Marine", hex: "#10172A", photos: ph("t-shirt", "marine", ["front"]) },
+      { name: "Prune", hex: "#875262", photos: ph("t-shirt", "prune", ["front"]) },
+      { name: "Rose pâle", hex: "#F4DBDE", photos: ph("t-shirt", "rose-pale", ["front"]) },
+    ],
     sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
+  },
+  {
+    id: "t-shirt-oversize", name: "T-shirt ample 220 g",
+    description: "T-shirt col rond, manches courtes, 220 g/m², coupe ample.",
+    colors: [
+      { name: "Blanc", hex: "#EAEAEA", photos: ph("t-shirt-oversize", "blanc", ["front"]) },
+      { name: "Noir", hex: "#2A2526", photos: ph("t-shirt-oversize", "noir", ["front"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    faces: { front: { x: 34, y: 25, w: 32, h: 28 } },
+  },
+  {
+    id: "t-shirt-chicago", name: "T-shirt Chicago",
+    description: "Chicago : t-shirt oversize col rond, coton, manches courtes, 240 g/m².",
+    colors: [
+      { name: "Naturel", hex: "#EEEDE9", photos: ph("t-shirt-chicago", "naturel", ["front"]) },
+      { name: "Jaune pâle", hex: "#F0EAC8", photos: ph("t-shirt-chicago", "jaune-pale", ["front"]) },
+      { name: "Camel", hex: "#B8854E", photos: ph("t-shirt-chicago", "camel", ["front"]) },
+      { name: "Sable", hex: "#A19975", photos: ph("t-shirt-chicago", "sable", ["front"]) },
+      { name: "Rose", hex: "#B8738F", photos: ph("t-shirt-chicago", "rose", ["front"]) },
+      { name: "Bordeaux délavé", hex: "#6C243B", photos: ph("t-shirt-chicago", "bordeaux", ["front"]) },
+      { name: "Ardoise délavé", hex: "#53526D", photos: ph("t-shirt-chicago", "ardoise", ["front"]) },
+      { name: "Kaki délavé", hex: "#6F674A", photos: ph("t-shirt-chicago", "kaki", ["front"]) },
+      { name: "Anthracite délavé", hex: "#4B4A4E", photos: ph("t-shirt-chicago", "anthracite", ["front"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {
     id: "capuche", name: "Sweat à capuche",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("capuche", "noir", ["front", "back", "left", "right"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 22,
     faces: { front: { x: 34, y: 34, w: 32, h: 19 }, back: { x: 33, y: 38, w: 34, h: 36 }, left: { x: 38, y: 26, w: 22, h: 28 }, right: { x: 37, y: 26, w: 22, h: 28 } },
+  },
+  {
+    id: "capuche-320", name: "Sweat à capuche 320 g",
+    description: "Sweat à capuche manches longues, poche kangourou, capuche doublée, cordon de serrage ton sur ton finition métal. 70 % coton, 30 % polyester, molleton 320 g/m², sans étiquette.",
+    colors: [
+      { name: "Noir", hex: "#222222", photos: ph("capuche-320", "noir", ["front"]) },
+      { name: "Marine", hex: "#1F1D28", photos: ph("capuche-320", "marine", ["front", "back"]) },
+      { name: "Gris chiné", hex: "#B6B5B6", photos: ph("capuche-320", "gris-chine", ["front", "back"]) },
+      { name: "Blanc", hex: "#F1F0F5", photos: ph("capuche-320", "blanc", ["front", "back"]) },
+      { name: "Beige", hex: "#F5D7B1", photos: ph("capuche-320", "beige", ["front", "back"]) },
+      { name: "Bleu ciel", hex: "#B2CDD8", photos: ph("capuche-320", "bleu-ciel", ["front", "back"]) },
+      { name: "Bleu roi", hex: "#014B92", photos: ph("capuche-320", "bleu-roi", ["front", "back"]) },
+      { name: "Rouge", hex: "#E81225", photos: ph("capuche-320", "rouge", ["front", "back"]) },
+      { name: "Bordeaux", hex: "#71152A", photos: ph("capuche-320", "bordeaux", ["front"]) },
+      { name: "Marron", hex: "#4F3834", photos: ph("capuche-320", "marron", ["front", "back"]) },
+      { name: "Mauve", hex: "#BF85AE", photos: ph("capuche-320", "mauve", ["front", "back"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    // Vues de dos fournies pour tous les coloris sauf noir et bordeaux.
+    faces: { front: { x: 32, y: 36, w: 34, h: 22 }, back: { x: 30, y: 38, w: 40, h: 36 } },
+  },
+  {
+    id: "capuche-zip", name: "Sweat zippé à capuche 320 g",
+    description: "Sweat à capuche zippé manches longues, 2 poches latérales, capuche doublée, cordon de serrage ton sur ton, fermeture éclair YKK. 70 % coton peigné, 30 % polyester, molleton 320 g/m², sans étiquette.",
+    colors: [
+      { name: "Noir", hex: "#1E1E1E", photos: ph("capuche-zip", "noir", ["front", "back"]) },
+      { name: "Marine", hex: "#1F2640", photos: ph("capuche-zip", "marine", ["front", "back"]) },
+      { name: "Gris chiné", hex: "#B9BBBF", photos: ph("capuche-zip", "gris-chine", ["front", "back"]) },
+      { name: "Anthracite", hex: "#4A4A4C", photos: ph("capuche-zip", "anthracite", ["front", "back"]) },
+      { name: "Bleu roi", hex: "#0B5FC4", photos: ph("capuche-zip", "bleu-roi", ["front", "back"]) },
+      { name: "Bordeaux", hex: "#7A1426", photos: ph("capuche-zip", "bordeaux", ["front", "back"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    // Face : cœur de poitrine (le zip coupe la face en deux). Dos : grande zone.
+    faces: { front: { x: 56, y: 24, w: 14, h: 10 }, back: { x: 26.5, y: 39.5, w: 46.5, h: 38 } },
+  },
+  {
+    id: "sweat-320", name: "Sweat col rond 320 g",
+    description: "Sweat-shirt col rond avec bande de propreté, sans étiquette. 70 % coton, 30 % polyester, molleton 320 g/m². Tailles adultes XS à 2XL.",
+    colors: [
+      { name: "Noir", hex: "#1B1B1B", photos: ph("sweat-320", "noir", ["front", "back"]) },
+      { name: "Marine", hex: "#222B44", photos: ph("sweat-320", "marine", ["front", "back"]) },
+      { name: "Gris chiné", hex: "#B3B5B8", photos: ph("sweat-320", "gris-chine", ["front", "back"]) },
+      { name: "Bordeaux", hex: "#6E1426", photos: ph("sweat-320", "bordeaux", ["front", "back"]) },
+      { name: "Beige", hex: "#EBCFA8", photos: ph("sweat-320", "beige", ["front", "back"]) },
+      { name: "Blanc", hex: "#F5F5F6", photos: ph("sweat-320", "blanc", ["front", "back"]) },
+    ],
+    sizes: ["XS", "S", "M", "L", "XL", "2XL"], price: null,
+    faces: { front: { x: 35, y: 28, w: 30, h: 19 }, back: { x: 33, y: 30, w: 34, h: 34 } },
   },
   {
     id: "sweat", name: "Sweat col rond",
@@ -57,35 +145,77 @@ export const products: ProductConfig[] = [
   },
   {
     id: "polo", name: "Polo",
-    colors: [{ name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) }],
+    description: "Polo manches courtes en maille piquée, deux rayures en relief au col, fentes latérales, bouton ton sur ton. 100 % coton, 210-220 g/m², sans étiquette.",
+    colors: [
+      { name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) },
+      { name: "Blanc", hex: "#F4F4F4", photos: ph("polo", "blanc", ["front", "back"]) },
+      { name: "Marine", hex: "#141A33", photos: ph("polo", "marine", ["front", "back"]) },
+      { name: "Bleu azur", hex: "#3A78BE", photos: ph("polo", "azur", ["front", "back"]) },
+    ],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 17, maxZoom: 1.5,
     faces: { front: { x: 33, y: 40, w: 34, h: 22 }, side: { x: 51, y: 27, w: 13, h: 14 }, back: { x: 33, y: 35, w: 34, h: 32 }, "three-quarter": null },
 
   },
   {
-    id: "casquette", name: "Casquette",
-    colors: [{ name: "Noir", hex: "#111111", photos: pv("casquette", ["front", "side", "back"]) }],
+    id: "casquette", name: "Casquette 5 pans",
+    description: "Casquette 5 pans : panneau avant structuré, visière préformée en polyéthylène recyclé, fermeture ajustable par boucle métal, œillets de ventilation. Tour de tête 58 cm.",
+    colors: [
+      { name: "Noir", hex: "#1F1F21", photos: ph("casquette", "noir", ["front", "back"]) },
+      { name: "Blanc", hex: "#E6E6E6", photos: ph("casquette", "blanc", ["front"]) },
+      { name: "Gris graphite", hex: "#56565E", photos: ph("casquette", "graphite", ["front"]) },
+      { name: "Rouge", hex: "#A91A2E", photos: ph("casquette", "rouge", ["front"]) },
+      { name: "Bleu roi", hex: "#223B7E", photos: ph("casquette", "bleu-roi", ["front"]) },
+      { name: "Marine", hex: "#1F2337", photos: ph("casquette", "marine", ["front"]) },
+      { name: "Bordeaux", hex: "#4E2337", photos: ph("casquette", "bordeaux", ["front"]) },
+      { name: "Vert bouteille", hex: "#133228", photos: ph("casquette", "vert-bouteille", ["front"]) },
+      { name: "Vert militaire", hex: "#44473C", photos: ph("casquette", "vert-militaire", ["front"]) },
+    ],
     sizes: ["Unique"], price: null, maxZoom: 1.5,
-    faces: { front: { x: 40, y: 52, w: 30, h: 16 }, side: { x: 40, y: 50, w: 28, h: 16 }, back: { x: 28, y: 58, w: 30, h: 14 } },
+    // Nouvelle série de photos (visière à droite) : la vue de côté d'origine n'est plus proposée.
+    faces: { front: { x: 39, y: 46.5, w: 27.5, h: 17.5 }, back: { x: 38, y: 42, w: 23.5, h: 17.5 } },
   },
+
   {
     id: "casquette-patch", name: "Casquette à patch",
-    colors: [{ name: "Noir", hex: "#111111", photos: pv("casquette-patch", ["front"]) }],
+    description: "Casquette 5 pans avec patch amovible : visière pré-courbée, empiècement dos en Rip-Strip™, œillets cousus, ajustable par patte, étiquette détachable. Compatible patchs BF841 et BF600. Tour de tête 58 cm.",
+    colors: [
+      { name: "Noir", hex: "#1F1F1F", photos: ph("casquette-patch", "noir", ["front", "back"]) },
+      { name: "Vert militaire", hex: "#494733", photos: ph("casquette-patch", "vert", ["front", "back"]) },
+      { name: "Sable", hex: "#887D5F", photos: ph("casquette-patch", "sable", ["front"]) },
+      { name: "Camouflage", hex: "#37372B", photos: ph("casquette-patch", "camo", ["front"]) },
+    ],
     sizes: ["Unique"], price: null, maxZoom: 1.25,
-    faces: { front: { x: 48, y: 43, w: 26, h: 22 } },
+    faces: { front: { x: 47.5, y: 42, w: 28.5, h: 21 }, back: { x: 44, y: 43, w: 30, h: 14 } },
   },
+
   {
     id: "gilet", name: "Gilet softshell",
-    colors: [{ name: "Noir", hex: "#111111", photos: pv("gilet", ["front", "back"]) }],
+    description: "Bodywarmer softshell 3 couches : tissu contrecollé avec membrane respirante et imperméable. 2 poches zippées latérales, 1 poche poitrine. Respirabilité jusqu'à 14 232 g/m²/24h, imperméabilité jusqu'à 8 173 mmH₂O.",
+    colors: [
+      { name: "Noir", hex: "#111111", photos: pv("gilet", ["front", "back"]) },
+      { name: "Marine", hex: "#062247", photos: ph("gilet", "marine", ["front", "back"]) },
+      { name: "Bleu roi", hex: "#0A35A0", photos: ph("gilet", "bleu-roi", ["front", "back"]) },
+      { name: "Gris foncé", hex: "#3D3D3D", photos: ph("gilet", "gris-fonce", ["front", "back"]) },
+      { name: "Gris chiné", hex: "#687170", photos: ph("gilet", "gris-chine", ["front", "back"]) },
+      // Rouge : seule la vue dos a été fournie.
+      { name: "Rouge", hex: "#E72C44", photos: ph("gilet", "rouge", ["back"]) },
+    ],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
     faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
   },
   {
     id: "bonnet", name: "Bonnet",
-    colors: [{ name: "Noir", hex: "#333333", photos: pv("bonnet", ["three-quarter"]) }],
+    description: "Bonnet Thinsulate™ avec patch amovible : tissu double épaisseur, empiècement coton sergé Rip-Strip™ interchangeable (compatible patchs BF600). 100 % acrylique Soft-Touch, doublure Thinsulate™ 65 % polypropylène, 35 % polyester.",
+    colors: [
+      { name: "Noir", hex: "#1C1C1C", photos: ph("bonnet", "noir", ["three-quarter"]) },
+      { name: "Gris graphite", hex: "#464446", photos: ph("bonnet", "graphite", ["three-quarter"]) },
+      { name: "Marine", hex: "#202533", photos: ph("bonnet", "marine", ["three-quarter"]) },
+      { name: "Vert militaire", hex: "#444335", photos: ph("bonnet", "vert", ["three-quarter"]) },
+    ],
     sizes: ["Unique"], price: null, maxZoom: 1.25,
-    faces: { "three-quarter": { x: 54, y: 62, w: 28, h: 16 } },
+    faces: { "three-quarter": { x: 56.5, y: 44, w: 34.5, h: 25.5 } },
   },
+
   {
     id: "pantalon", name: "Pantalon",
     colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
