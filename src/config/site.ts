@@ -4,13 +4,21 @@ export const site = {
   city: "Aulnay-sous-Bois",
   postalCode: "93600",
   // Coordonnées identiques à NOVRA (même gérant, mêmes locaux), reprises des mentions légales publiques de novra.paris.
-  // À faire valider par le client. Téléphone et horaires : non communiqués, volontairement laissés vides.
+  // À faire valider par le client. Téléphone : non communiqué, volontairement laissé vide.
   street: "26 ter rue Jules Princet",
   address: "26 ter rue Jules Princet, 93600 Aulnay-sous-Bois",
-  email: "Novraurban@gmail.com",
-  instagram: { handle: "@novra_officiel", url: "https://www.instagram.com/novra_officiel/" },
+  email: "Atelierprint2.0@gmail.com",
+  instagram: { handle: "@aulnayprint", url: "https://www.instagram.com/aulnayprint/" },
   phone: "",
-  hours: "",
+  // Horaires repris de la fiche boutique NOVRA (table store_settings) — à confirmer par le client. Dimanche : non indiqué.
+  hours: [
+    { day: "Lundi", time: "Fermé" },
+    { day: "Mardi", time: "11h – 18h" },
+    { day: "Mercredi", time: "11h – 18h" },
+    { day: "Jeudi", time: "11h – 18h" },
+    { day: "Vendredi", time: "10h – 12h et 14h – 18h" },
+    { day: "Samedi", time: "11h – 19h" },
+  ],
   nav: [
     { href: "/", label: "Accueil" },
     { href: "/prestations", label: "Nos prestations" },

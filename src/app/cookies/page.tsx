@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-export const metadata: Metadata = { title: "Cookies" };
+export const metadata: Metadata = { title: "Cookies", description: "Cookies — L'Atelier de l'Impression, Aulnay-sous-Bois.", robots: { index: false } }; // noindex tant que le contenu n'est pas validé
 export default function Page() {
   return (
     <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6">

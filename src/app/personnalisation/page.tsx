@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Simulator } from "@/components/simulator/Simulator";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/personnalisation" },
   title: "Personnalisation — simulateur de logo",
   description: "Visualisez votre logo sur t-shirt, sweat, polo, casquette ou gilet, puis commandez ou demandez votre devis. Aulnay-sous-Bois.",
 };

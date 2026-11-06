@@ -5,6 +5,7 @@ import { PageHero, CtaBand } from "@/components/PageHero";
 import { services, techniques } from "@/config/prestations";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/prestations" },
   title: "Nos prestations",
   description: "Impression et personnalisation à Aulnay-sous-Bois : textile, objets publicitaires, bagagerie, supports de communication, cadeaux d'entreprise.",
 };

@@ -4,6 +4,7 @@ import { Gallery } from "@/components/realisations/Gallery";
 import { Clients } from "@/components/home/Clients";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/realisations" },
   title: "Nos réalisations",
   description: "Découvrez des exemples de projets réalisés par L'Atelier de l'Impression à Aulnay-sous-Bois.",
 };

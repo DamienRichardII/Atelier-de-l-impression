@@ -17,9 +17,8 @@ export const metadata: Metadata = {
   },
   description:
     "Personnalisez vos textiles et objets avec votre logo. Simulateur en ligne, devis rapide. Aulnay-sous-Bois (93600), Seine-Saint-Denis.",
-  openGraph: { type: "website", locale: "fr_FR", siteName: "L'Atelier de l'Impression", url: "/" },
+  openGraph: { type: "website", locale: "fr_FR", siteName: "L'Atelier de l'Impression" },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/" },
 };
 export const viewport: Viewport = { themeColor: "#ffffff", width: "device-width", initialScale: 1 };
 

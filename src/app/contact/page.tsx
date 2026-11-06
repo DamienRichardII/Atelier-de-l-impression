@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, MapPin, AtSign } from "lucide-react";
+import { AtSign, Clock, Mail, MapPin } from "lucide-react";
 import { site } from "@/config/site";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description: "Contacter L'Atelier de l'Impression à Aulnay-sous-Bois : adresse, e-mail et Instagram.",
 };
@@ -38,6 +39,14 @@ export default function Page() {
             <a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4 hover:no-underline">{site.instagram.handle}</a>
           </p>
         </div>
+      </div>
+
+      <div className="card mt-4 p-6">
+        <Clock size={20} aria-hidden />
+        <p className="mt-6 text-sm text-muted">Horaires d'ouverture</p>
+        <dl className="mt-3 grid max-w-md grid-cols-[7rem_1fr] gap-y-1.5 text-sm">
+          {site.hours.map((h) => (<div key={h.day} className="contents"><dt className="text-muted">{h.day}</dt><dd className="font-medium">{h.time}</dd></div>))}
+        </dl>
       </div>
 
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">

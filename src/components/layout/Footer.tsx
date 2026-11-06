@@ -25,6 +25,9 @@ export function Footer() {
             {site.phone && <p className="mt-1 text-sm text-white/80">{site.phone}</p>}
             {site.email && <p className="mt-1 text-sm"><a href={`mailto:${site.email}`} className="text-white/80 hover:text-white">{site.email}</a></p>}
             <p className="mt-1 text-sm"><a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white">Instagram {site.instagram.handle}</a></p>
+            <ul className="mt-4 space-y-0.5 text-xs text-white/60">
+              {site.hours.map((h) => (<li key={h.day}>{h.day} : {h.time}</li>))}
+            </ul>
           </div>
           <div>
             <p className="eyebrow !text-white/60">Navigation</p>

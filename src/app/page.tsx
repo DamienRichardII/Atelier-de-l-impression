@@ -16,6 +16,8 @@ const faq = [
   ["Comment obtenir un prix ?", "Via le devis intégré au simulateur. Un lien de paiement SumUp vous est envoyé après acceptation."],
 ];
 
+export const metadata = { alternates: { canonical: "/" } };
+
 export default function Home() {
   return (
     <>
@@ -29,7 +31,7 @@ export default function Home() {
           {products.map((p) => (
             <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
               {(() => {
-                const src = p.colors[0].photos?.front ?? p.colors[0].photos?.back;
+                const src = Object.values(p.colors[0].photos ?? {})[0];
                 return src ? (
                   <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
                     <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
