@@ -4,7 +4,7 @@ import { Simulator } from "@/components/simulator/Simulator";
 
 export const metadata: Metadata = {
   title: "Personnalisation — simulateur de logo",
-  description: "Visualisez votre logo sur t-shirt, sweat, polo, casquette, tote bag ou mug, puis demandez votre devis. Aulnay-sous-Bois.",
+  description: "Visualisez votre logo sur t-shirt, sweat, polo, casquette ou gilet, puis commandez ou demandez votre devis. Aulnay-sous-Bois.",
 };
 
 export default function Page() {

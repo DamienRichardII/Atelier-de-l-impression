@@ -17,7 +17,7 @@ export function Hero() {
       <motion.div {...fade(0.05, 24)} className="mx-auto w-full max-w-[1672px]">
         <Image
           src="/hero/hero.webp" width={1672} height={812} priority sizes="100vw"
-          alt="L'Atelier de l'Impression : vestes, sweats, T-shirts, polos, pantalons, casquettes, mugs, tote bags et sacs à dos personnalisés"
+          alt="L'Atelier de l'Impression : vestes, sweats, T-shirts, polos, pantalons et casquettes personnalisés"
           className="h-auto w-full [mask-image:linear-gradient(to_bottom,#000_90%,transparent)]"
         />
       </motion.div>

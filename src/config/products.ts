@@ -87,6 +87,20 @@ export const products: ProductConfig[] = [
     faces: { "three-quarter": { x: 54, y: 62, w: 28, h: 16 } },
   },
   {
+    id: "pantalon", name: "Pantalon",
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
+
+  },
+];
+
+/**
+ * Produits retirés du site en attendant de meilleures photos (fichiers conservés dans /public/products).
+ * Pour les remettre : déplacer l'objet voulu dans le tableau `products` ci-dessus.
+ */
+export const productsHidden: ProductConfig[] = [
+  {
     id: "tote-bag", name: "Tote bag",
     colors: [{ name: "Écru", hex: "#E6DCC8", photos: pv("tote-bag", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.5,
@@ -98,13 +112,6 @@ export const products: ProductConfig[] = [
     colors: [{ name: "Blanc", hex: "#FFFFFF", photos: pv("mug", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.5,
     faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 }, side: null, "three-quarter": null },
-
-  },
-  {
-    id: "pantalon", name: "Pantalon",
-    colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
-    faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
 
   },
   {

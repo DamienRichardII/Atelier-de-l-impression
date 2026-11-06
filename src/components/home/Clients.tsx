@@ -8,6 +8,11 @@ const clients = [
   { src: "/clients/merchoff.png", alt: "MERCHOFF", w: 1478, h: 235, cls: "h-7 sm:h-9" },
   { src: "/clients/piraterie.png", alt: "La Piraterie", w: 724, h: 471, cls: "h-12 sm:h-14" },
   { src: "/clients/destock.jpg", alt: "Destock Pièces Auto", w: 447, h: 447, cls: "h-20 rounded-2xl sm:h-24" },
+  { src: "/clients/csl-aulnay.png", alt: "CSL Aulnay", w: 272, h: 311, cls: "h-16 sm:h-20" },
+  { src: "/clients/montreuil-fc.png", alt: "Montreuil Football Club", w: 415, h: 414, cls: "h-16 sm:h-20" },
+  { src: "/clients/esperance-aulnaysienne.png", alt: "Espérance Aulnaysienne", w: 108, h: 194, cls: "h-16 sm:h-20" },
+  { src: "/clients/fca.png", alt: "Football Club Aulnaysien (F.C.A)", w: 418, h: 506, cls: "h-16 sm:h-20" },
+  { src: "/clients/micro3ks.png", alt: "Micro 3KS", w: 297, h: 297, cls: "h-16 sm:h-20" },
   { src: "/clients/afrique.png", alt: "Logo client (carte de l'Afrique)", w: 450, h: 450, cls: "h-12 sm:h-14" },
 ];
 
