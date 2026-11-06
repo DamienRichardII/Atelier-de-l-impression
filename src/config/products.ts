@@ -64,9 +64,27 @@ export const products: ProductConfig[] = [
   },
   {
     id: "casquette", name: "Casquette",
-    colors: [{ name: "Noir", hex: "#111111", photos: ph("casquette", "base", ["front", "side", "back"]) }],
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("casquette", ["front", "side", "back"]) }],
+    sizes: ["Unique"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 40, y: 52, w: 30, h: 16 }, side: { x: 40, y: 50, w: 28, h: 16 }, back: { x: 28, y: 58, w: 30, h: 14 } },
+  },
+  {
+    id: "casquette-patch", name: "Casquette à patch",
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("casquette-patch", ["front"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.25,
-    faces: { front: { x: 34, y: 34, w: 32, h: 18 }, side: { x: 52, y: 39, w: 22, h: 17 }, back: { x: 36, y: 36, w: 28, h: 14 } },
+    faces: { front: { x: 48, y: 43, w: 26, h: 22 } },
+  },
+  {
+    id: "gilet", name: "Gilet softshell",
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("gilet", ["front", "back"]) }],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
+  },
+  {
+    id: "bonnet", name: "Bonnet",
+    colors: [{ name: "Noir", hex: "#333333", photos: pv("bonnet", ["three-quarter"]) }],
+    sizes: ["Unique"], price: null, maxZoom: 1.25,
+    faces: { "three-quarter": { x: 54, y: 62, w: 28, h: 16 } },
   },
   {
     id: "tote-bag", name: "Tote bag",

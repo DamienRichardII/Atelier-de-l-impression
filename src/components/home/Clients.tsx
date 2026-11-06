@@ -7,6 +7,7 @@ const clients = [
   { src: "/clients/bkagency.png", alt: "Bkagency, agence de communication", w: 721, h: 501, cls: "h-12 sm:h-14" },
   { src: "/clients/merchoff.png", alt: "MERCHOFF", w: 1478, h: 235, cls: "h-7 sm:h-9" },
   { src: "/clients/piraterie.png", alt: "La Piraterie", w: 724, h: 471, cls: "h-12 sm:h-14" },
+  { src: "/clients/destock.jpg", alt: "Destock Pièces Auto", w: 447, h: 447, cls: "h-20 rounded-2xl sm:h-24" },
   { src: "/clients/afrique.png", alt: "Logo client (carte de l'Afrique)", w: 450, h: 450, cls: "h-12 sm:h-14" },
 ];
 

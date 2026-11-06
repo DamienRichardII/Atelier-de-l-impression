@@ -18,3 +18,13 @@ insert into public.atelier_products (id, name, category, price_cents, purchasabl
   ('pantalon','Pantalon','textile',null,false),
   ('sac-a-dos','Sac à dos','accessoire',null,false)
 on conflict (id) do nothing;
+
+-- Prix fermes validés par l'utilisateur (06/11/2026) : achat en ligne sans devis, logo inclus.
+update public.atelier_products set price_cents = v.p, purchasable = true
+from (values ('t-shirt',1500),('polo',1700),('capuche',2200)) as v(id,p) where atelier_products.id = v.id;
+
+insert into public.atelier_products (id, name, category, price_cents, purchasable) values
+  ('casquette-patch','Casquette à patch','accessoire',null,false),
+  ('gilet','Gilet softshell','textile',null,false),
+  ('bonnet','Bonnet','accessoire',null,false)
+on conflict (id) do nothing;
