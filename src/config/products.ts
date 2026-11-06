@@ -47,7 +47,7 @@ export const products: ProductConfig[] = [
     id: "polo", name: "Polo",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("polo", "base", ["front", "side", "back"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null,
-    faces: { front: { x: 30, y: 36, w: 40, h: 28 }, side: { x: 51, y: 27, w: 14, h: 15 }, back: { x: 30, y: 26, w: 40, h: 38 } },
+    faces: { front: { x: 33, y: 40, w: 34, h: 22 }, side: { x: 51, y: 27, w: 13, h: 14 }, back: { x: 33, y: 35, w: 34, h: 32 } },
   },
   {
     id: "casquette", name: "Casquette",
@@ -59,19 +59,19 @@ export const products: ProductConfig[] = [
     id: "tote-bag", name: "Tote bag",
     colors: [{ name: "Écru", hex: "#E6DCC8", photos: ph("tote-bag", "base", ["front", "back"]) }],
     sizes: ["Unique"], price: null,
-    faces: { front: { x: 30, y: 52, w: 40, h: 28 }, back: { x: 34, y: 52, w: 32, h: 28 } },
+    faces: { front: { x: 31, y: 52, w: 38, h: 30 }, back: { x: 31, y: 52, w: 38, h: 30 } },
   },
   {
     id: "mug", name: "Mug",
     colors: [{ name: "Blanc", hex: "#FFFFFF", photos: ph("mug", "base", ["front", "back"]) }],
     sizes: ["Unique"], price: null,
-    faces: { front: { x: 20, y: 31, w: 38, h: 36 }, back: { x: 32, y: 31, w: 36, h: 36 } },
+    faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 } },
   },
   {
     id: "pantalon", name: "Pantalon",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("pantalon", "base", ["front", "side", "back"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null,
-    faces: { front: { x: 35, y: 24, w: 13, h: 16 }, side: { x: 42, y: 25, w: 16, h: 20 }, back: { x: 36, y: 22, w: 28, h: 16 } },
+    faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 } },
   },
   {
     id: "sac-a-dos", name: "Sac à dos",
