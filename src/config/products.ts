@@ -1,6 +1,6 @@
 // Données de démonstration — à remplacer par la table `products` (Supabase) via l'admin.
 // Aucun prix inventé : price = null → devis obligatoire.
-export type Face = "front" | "back" | "left" | "right" | "side";
+export type Face = "front" | "back" | "left" | "right" | "side" | "three-quarter";
 
 export interface PrintZone { x: number; y: number; w: number; h: number } // en % du canevas
 
@@ -16,12 +16,19 @@ export interface ProductConfig {
   name: string;
   colors: ColorOption[];
   sizes: string[];
-  faces: Partial<Record<Face, PrintZone>>;
+  /** Zone imprimable par vue. `null` = vue de présentation (pas de placement de logo). */
+  faces: Partial<Record<Face, PrintZone | null>>;
+  /** Zoom max cohérent avec la résolution réelle des photos (au-delà : pixellisation). */
+  maxZoom?: number;
   price: number | null;
 }
 
 const ph = (dir: string, c: string, faces: Face[]) =>
   Object.fromEntries(faces.map((f) => [f, `/products/${dir}/${c}-${f}.webp`])) as Partial<Record<Face, string>>;
+
+/** Photos « /products/<dir>/<vue>.webp » (jeu natif, 4 vues). */
+const pv = (dir: string, faces: Face[]) =>
+  Object.fromEntries(faces.map((f) => [f, `/products/${dir}/${f}.webp`])) as Partial<Record<Face, string>>;
 
 export const products: ProductConfig[] = [
   {
@@ -45,38 +52,42 @@ export const products: ProductConfig[] = [
   },
   {
     id: "polo", name: "Polo",
-    colors: [{ name: "Noir", hex: "#111111", photos: ph("polo", "base", ["front", "side", "back"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
-    faces: { front: { x: 33, y: 40, w: 34, h: 22 }, side: { x: 51, y: 27, w: 13, h: 14 }, back: { x: 33, y: 35, w: 34, h: 32 } },
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) }],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 33, y: 40, w: 34, h: 22 }, side: { x: 51, y: 27, w: 13, h: 14 }, back: { x: 33, y: 35, w: 34, h: 32 }, "three-quarter": null },
+
   },
   {
     id: "casquette", name: "Casquette",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("casquette", "base", ["front", "side", "back"]) }],
-    sizes: ["Unique"], price: null,
+    sizes: ["Unique"], price: null, maxZoom: 1.25,
     faces: { front: { x: 34, y: 34, w: 32, h: 18 }, side: { x: 52, y: 39, w: 22, h: 17 }, back: { x: 36, y: 36, w: 28, h: 14 } },
   },
   {
     id: "tote-bag", name: "Tote bag",
-    colors: [{ name: "Écru", hex: "#E6DCC8", photos: ph("tote-bag", "base", ["front", "back"]) }],
-    sizes: ["Unique"], price: null,
-    faces: { front: { x: 31, y: 52, w: 38, h: 30 }, back: { x: 31, y: 52, w: 38, h: 30 } },
+    colors: [{ name: "Écru", hex: "#E6DCC8", photos: pv("tote-bag", ["front", "back", "side", "three-quarter"]) }],
+    sizes: ["Unique"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 31, y: 52, w: 38, h: 30 }, back: { x: 31, y: 52, w: 38, h: 30 }, side: null, "three-quarter": null },
+
   },
   {
     id: "mug", name: "Mug",
-    colors: [{ name: "Blanc", hex: "#FFFFFF", photos: ph("mug", "base", ["front", "back"]) }],
-    sizes: ["Unique"], price: null,
-    faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 } },
+    colors: [{ name: "Blanc", hex: "#FFFFFF", photos: pv("mug", ["front", "back", "side", "three-quarter"]) }],
+    sizes: ["Unique"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 }, side: null, "three-quarter": null },
+
   },
   {
     id: "pantalon", name: "Pantalon",
-    colors: [{ name: "Noir", hex: "#111111", photos: ph("pantalon", "base", ["front", "side", "back"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
-    faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 } },
+    colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
+
   },
   {
     id: "sac-a-dos", name: "Sac à dos",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("sac-a-dos", "base", ["front", "side", "back"]) }],
-    sizes: ["Unique"], price: null,
+    sizes: ["Unique"], price: null, maxZoom: 1.25,
     faces: { front: { x: 30, y: 33, w: 40, h: 18 }, side: { x: 38, y: 34, w: 22, h: 22 }, back: { x: 40, y: 34, w: 20, h: 24 } },
   },
 ];

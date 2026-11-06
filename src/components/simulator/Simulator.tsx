@@ -14,7 +14,7 @@ const PreviewStage = dynamic(() => import("./PreviewStage").then((m) => m.Previe
   loading: () => <div className="aspect-[500/560] w-full animate-pulse rounded-3xl bg-mist" />,
 });
 
-const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit", side: "Côté" };
+const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit", side: "Côté", "three-quarter": "Trois quarts" };
 
 function Section({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
   return (
@@ -45,7 +45,8 @@ export function Simulator() {
   const stage = useRef<PreviewHandle>(null);
   const input = useRef<HTMLInputElement>(null);
 
-  const zone = product.faces[face];
+  const zone = product.faces[face] ?? undefined;
+  const maxZoom = product.maxZoom ?? 2.5;
   const logo = logos[face];
   const faces = useMemo(
     () => (Object.keys(product.faces) as Face[]).filter((f) => !color.photos || color.photos[f]),
@@ -100,8 +101,8 @@ export function Simulator() {
                 className={`btn !min-h-11 !px-4 ${face === f ? "btn-dark" : "btn-light"}`}>{FACE_LABEL[f]}</button>
             ))}
             <span className="flex-1" />
-            <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Zoom arrière" onClick={() => setZoom((z) => Math.max(1, z - 0.25))}><ZoomOut size={18} /></button>
-            <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Zoom avant" onClick={() => setZoom((z) => Math.min(2.5, z + 0.25))}><ZoomIn size={18} /></button>
+            <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Zoom arrière" disabled={zoom <= 1} onClick={() => setZoom((z) => Math.max(1, z - 0.25))}><ZoomOut size={18} /></button>
+            <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Zoom avant" disabled={zoom >= maxZoom} onClick={() => setZoom((z) => Math.min(maxZoom, z + 0.25))}><ZoomIn size={18} /></button>
             <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Afficher les zones imprimables" aria-pressed={zones} onClick={() => setZones(!zones)}><Grid2x2 size={18} /></button>
             <button className="grid h-11 w-11 place-items-center rounded-xl border border-line" aria-label="Fond clair ou foncé" onClick={() => setDark(!dark)}>{dark ? <Sun size={18} /> : <Moon size={18} />}</button>
             <button className="btn btn-light !min-h-11 !px-4" onClick={download} disabled={!logo}><Download size={16} /> PNG</button>
@@ -131,7 +132,11 @@ export function Simulator() {
             </div>
           </Section>
           <Section n="03" title="Votre logo">
-            {!logo ? (
+            {!zone ? (
+              <p className="rounded-2xl border border-line p-4 text-sm text-muted">
+                Cette vue est une vue de présentation du produit. Pour placer votre logo, sélectionnez une vue Avant, Arrière ou Côté (celles qui affichent une zone d'impression pointillée).
+              </p>
+            ) : !logo ? (
               <div onDragOver={(e) => { e.preventDefault(); setDragOver(true); }} onDragLeave={() => setDragOver(false)}
                 onDrop={(e) => { e.preventDefault(); setDragOver(false); onFile(e.dataTransfer.files[0]); }}
                 className={`rounded-2xl border border-dashed p-8 text-center transition ${dragOver ? "border-black bg-mist" : "border-line"}`}>

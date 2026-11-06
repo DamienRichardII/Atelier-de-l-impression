@@ -33,7 +33,7 @@ interface Props {
   productId: string;
   color: string;
   photo?: string;
-  zone?: PrintZone;
+  zone?: PrintZone | null;
   logo?: LogoPlacement;
   darkBg: boolean;
   showZone: boolean;
@@ -47,6 +47,7 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
   const stageRef = useRef<Konva.Stage>(null);
   const logoRef = useRef<Konva.Image>(null);
   const trRef = useRef<Konva.Transformer>(null);
+  const photoLayer = useRef<Konva.Layer>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const img = useImg(logo?.dataUrl);
@@ -62,6 +63,12 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
   useEffect(() => {
     if (logoRef.current && trRef.current) { trRef.current.nodes([logoRef.current]); trRef.current.getLayer()?.batchDraw(); }
   }, [img, logo?.scale]);
+
+  // Lissage haute qualité pour les réductions d'image (sinon le navigateur utilise un filtre basse qualité).
+  useEffect(() => {
+    const ctx = photoLayer.current?.getContext()._context as CanvasRenderingContext2D | undefined;
+    if (ctx) { ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high"; photoLayer.current?.batchDraw(); }
+  }, [photoImg, width, zoom]);
 
   const scale = (width / W) * zoom;
   const zx = zone ? (zone.x / 100) * W : 0, zy = zone ? (zone.y / 100) * H : 0;
@@ -94,9 +101,10 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
       style={{ aspectRatio: `${W}/${H}`, touchAction: "none" }}>
       <Stage ref={stageRef} pixelRatio={typeof window === "undefined" ? 1 : Math.max(window.devicePixelRatio || 1, 2)} width={width} height={(width * H) / W} scale={{ x: scale, y: scale }}
         offsetX={(W - W / zoom) / 2} offsetY={(H - H / zoom) / 2}>
-        <Layer>
+        <Layer listening={false} ref={photoLayer}>
           {photo ? (
-            photoImg && <KImage image={photoImg} x={0} y={0} width={W} height={H} listening={false} imageSmoothingEnabled />
+            photoImg && <KImage image={photoImg} x={0} y={0} width={W} height={H} listening={false} imageSmoothingEnabled
+              shadowColor="#000000" shadowBlur={28} shadowOffsetY={14} shadowOpacity={darkBg ? 0 : 0.14} />
           ) : isCap ? (
             <Group>
               <Path data="M90 330 Q90 120 250 120 Q410 120 410 330 Z" fill={color} stroke={outline} strokeWidth={2} />
@@ -113,6 +121,8 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
               <Path data={SHAPES[kind]} fill={color} stroke={outline} strokeWidth={2} />
             </Group>
           )}
+        </Layer>
+        <Layer>
           {zone && (
             <Rect name="guide" visible={showZone} x={zx} y={zy} width={zw} height={zh}
               stroke={darkBg || color === "#111111" ? "#ffffff" : "#000000"} dash={[6, 6]} strokeWidth={1} opacity={0.5} listening={false} />
