@@ -133,13 +133,6 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 35, y: 28, w: 30, h: 19 }, back: { x: 33, y: 30, w: 34, h: 34 } },
   },
   {
-    id: "sweat", family: "Sweats col rond", name: "Sweat col rond",
-    // Pas de photo de face fournie pour ce modèle : seules les vues dos et côté gauche sont proposées.
-    colors: [{ name: "Gris perle", hex: "#CFCDCA", photos: ph("sweat", "gris", ["back", "left"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
-    faces: { back: { x: 34, y: 17, w: 32, h: 42 }, left: { x: 41, y: 20, w: 22, h: 34 } },
-  },
-  {
     id: "polo", family: "Polo", name: "Polo",
     description: "Polo manches courtes en maille piquée, deux rayures en relief au col, fentes latérales, bouton ton sur ton. 100 % coton, 210-220 g/m², sans étiquette.",
     colors: [
@@ -212,6 +205,37 @@ export const products: ProductConfig[] = [
     faces: { "three-quarter": { x: 56.5, y: 44, w: 34.5, h: 25.5 } },
   },
 
+  {
+    id: "tablier", family: "Tablier", name: "Tablier à bavette",
+    description: "Tablier à bavette avec poche, 100 % coton, encolure arrondie, boucle plastique pour ajuster la bretelle. Hauteur 90 cm, largeur 75 cm. Lavage à 60 °C.",
+    colors: [
+      { name: "Noir", hex: "#2E2E2E", photos: ph("tablier", "noir", ["front"]) },
+      { name: "Anthracite", hex: "#373F47", photos: ph("tablier", "anthracite", ["front"]) },
+      { name: "Marine", hex: "#32405B", photos: ph("tablier", "marine", ["front"]) },
+      { name: "Gris", hex: "#9D9D9D", photos: ph("tablier", "gris", ["front"]) },
+      { name: "Camel", hex: "#B09981", photos: ph("tablier", "camel", ["front"]) },
+      { name: "Jaune", hex: "#EEA42E", photos: ph("tablier", "jaune", ["front"]) },
+      { name: "Orange", hex: "#DF7237", photos: ph("tablier", "orange", ["front"]) },
+      { name: "Rouge", hex: "#C42030", photos: ph("tablier", "rouge", ["front"]) },
+    ],
+    sizes: ["Taille unique"], price: null, maxZoom: 1.5,
+    // Zone sur la bavette (au-dessus de la poche).
+    faces: { front: { x: 39.5, y: 25, w: 21, h: 22 } },
+  },
+  {
+    id: "gilet-securite", family: "Gilet de sécurité", name: "Gilet de sécurité",
+    description: "Gilet de sécurité à bandes réfléchissantes, certifié EN ISO 20471:2013 + A1:2016 (XL : classe 1 ; à partir de XXL : classe 2). 2 bandes horizontales cousues, fermeture Velcro®.",
+    colors: [
+      { name: "Jaune fluo", hex: "#E3E81F", photos: ph("gilet-securite", "jaune", ["front", "back"]) },
+      { name: "Blanc", hex: "#F4F4F4", photos: ph("gilet-securite", "blanc", ["front", "back"]) },
+      { name: "Bleu roi", hex: "#2E3D93", photos: ph("gilet-securite", "bleu-roi", ["front", "back"]) },
+      { name: "Bleu clair", hex: "#3F78C8", photos: ph("gilet-securite", "bleu-clair", ["front"]) },
+      { name: "Vert", hex: "#6ED05F", photos: ph("gilet-securite", "vert", ["front"]) },
+    ],
+    sizes: ["XL", "XXL", "3XL"], price: null, maxZoom: 1.5,
+    // Dos : panneau central entre les bandes. Face : poitrine gauche, entre bande et ouverture (zone étroite).
+    faces: { front: { x: 33.5, y: 24, w: 11, h: 18 }, back: { x: 32, y: 23, w: 36, h: 30 } },
+  },
   {
     id: "pantalon", family: "Pantalon", name: "Pantalon",
     colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
