@@ -92,11 +92,11 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
   return (
     <div ref={wrapRef} className={`relative w-full overflow-hidden rounded-3xl border border-line ${darkBg ? "bg-ink" : "bg-mist"}`}
       style={{ aspectRatio: `${W}/${H}`, touchAction: "none" }}>
-      <Stage ref={stageRef} width={width} height={(width * H) / W} scale={{ x: scale, y: scale }}
+      <Stage ref={stageRef} pixelRatio={typeof window === "undefined" ? 1 : Math.max(window.devicePixelRatio || 1, 2)} width={width} height={(width * H) / W} scale={{ x: scale, y: scale }}
         offsetX={(W - W / zoom) / 2} offsetY={(H - H / zoom) / 2}>
         <Layer>
           {photo ? (
-            photoImg && <KImage image={photoImg} x={0} y={0} width={W} height={H} listening={false} />
+            photoImg && <KImage image={photoImg} x={0} y={0} width={W} height={H} listening={false} imageSmoothingEnabled />
           ) : isCap ? (
             <Group>
               <Path data="M90 330 Q90 120 250 120 Q410 120 410 330 Z" fill={color} stroke={outline} strokeWidth={2} />
