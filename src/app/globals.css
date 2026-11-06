@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --ink: #111111;
+  --mist: #f5f5f5;
+  --muted: #737373;
+  --line: #e5e5e5;
+}
+
+@theme inline {
+  --color-white: var(--white);
+  --color-black: var(--black);
+  --color-ink: var(--ink);
+  --color-mist: var(--mist);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --font-sans: var(--font-geist-sans);
+  --radius-pill: 999px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Séparateur inspiré des lignes du logo */
+.rule { height: 1px; background: var(--line); }
+
+@layer components {
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 48px; padding: 0 1.75rem; border-radius: 14px;
+  font-weight: 600; letter-spacing: .06em; text-transform: uppercase; font-size: .8rem;
+  border: 1px solid var(--black); transition: transform .2s, background .2s, color .2s;
+}
+.btn:active { transform: scale(.98); }
+.btn-dark { background: var(--black); color: var(--white); }
+.btn-dark:hover { background: var(--ink); }
+.btn-light { background: var(--white); color: var(--black); }
+.btn-light:hover { background: var(--black); color: var(--white); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.card { border: 1px solid var(--line); border-radius: 20px; background: var(--white); }
+.eyebrow { font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
