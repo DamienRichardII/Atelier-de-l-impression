@@ -13,6 +13,7 @@ const clients = [
   { src: "/clients/esperance-aulnaysienne.png", alt: "Espérance Aulnaysienne", w: 108, h: 194, cls: "h-16 sm:h-20" },
   { src: "/clients/fca.png", alt: "Football Club Aulnaysien (F.C.A)", w: 418, h: 506, cls: "h-16 sm:h-20" },
   { src: "/clients/micro3ks.png", alt: "Micro 3KS", w: 297, h: 297, cls: "h-16 sm:h-20" },
+  { src: "/clients/faucon-training.png", alt: "Faucon Training", w: 1266, h: 734, cls: "h-14 sm:h-16" },
   { src: "/clients/afrique.png", alt: "Logo client (carte de l'Afrique)", w: 450, h: 450, cls: "h-12 sm:h-14" },
 ];
 

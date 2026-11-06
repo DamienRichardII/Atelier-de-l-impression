@@ -14,10 +14,10 @@ export const site = {
   nav: [
     { href: "/", label: "Accueil" },
     { href: "/prestations", label: "Nos prestations" },
-    { href: "/catalogue", label: "Catalogue" },
     { href: "/personnalisation", label: "Personnalisation" },
     { href: "/realisations", label: "Réalisations" },
-    { href: "/a-propos", label: "À propos" },
     { href: "/contact", label: "Contact" },
   ],
+  // Liens du pied de page uniquement (« À propos » n'est pas dans l'en-tête).
+  footerExtra: [{ href: "/a-propos", label: "À propos" }],
 } as const;

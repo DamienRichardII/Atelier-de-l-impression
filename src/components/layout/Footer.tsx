@@ -29,7 +29,7 @@ export function Footer() {
           <div>
             <p className="eyebrow !text-white/60">Navigation</p>
             <ul className="mt-3 space-y-2 text-sm">
-              {site.nav.map((n) => (
+              {[...site.nav, ...site.footerExtra].map((n) => (
                 <li key={n.href}><Link href={n.href} className="text-white/80 hover:text-white">{n.label}</Link></li>
               ))}
             </ul>
