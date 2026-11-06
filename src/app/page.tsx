@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { products } from "@/config/products";
@@ -25,7 +26,16 @@ export default function Home() {
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
           {products.map((p) => (
             <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
-              <div className="grid aspect-square place-items-center rounded-xl bg-mist text-xs text-muted">Photo à fournir</div>
+              {(() => {
+                const src = p.colors[0].photos?.front ?? p.colors[0].photos?.back;
+                return src ? (
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
+                    <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
+                  </div>
+                ) : (
+                  <div className="grid aspect-square place-items-center rounded-xl bg-mist text-xs text-muted">Photo à fournir</div>
+                );
+              })()}
               <p className="mt-4 font-medium">{p.name}</p>
               <p className="text-sm text-muted">Personnaliser →</p>
             </Link>

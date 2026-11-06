@@ -32,6 +32,7 @@ function useImg(src?: string) {
 interface Props {
   productId: string;
   color: string;
+  photo?: string;
   zone?: PrintZone;
   logo?: LogoPlacement;
   darkBg: boolean;
@@ -41,7 +42,7 @@ interface Props {
 }
 
 export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewStage(
-  { productId, color, zone, logo, darkBg, showZone, zoom, onChange }, ref,
+  { productId, color, photo, zone, logo, darkBg, showZone, zoom, onChange }, ref,
 ) {
   const stageRef = useRef<Konva.Stage>(null);
   const logoRef = useRef<Konva.Image>(null);
@@ -49,6 +50,7 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
   const wrapRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(320);
   const img = useImg(logo?.dataUrl);
+  const photoImg = useImg(photo);
 
   useEffect(() => {
     const el = wrapRef.current; if (!el) return;
@@ -93,7 +95,9 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
       <Stage ref={stageRef} width={width} height={(width * H) / W} scale={{ x: scale, y: scale }}
         offsetX={(W - W / zoom) / 2} offsetY={(H - H / zoom) / 2}>
         <Layer>
-          {isCap ? (
+          {photo ? (
+            photoImg && <KImage image={photoImg} x={0} y={0} width={W} height={H} listening={false} />
+          ) : isCap ? (
             <Group>
               <Path data="M90 330 Q90 120 250 120 Q410 120 410 330 Z" fill={color} stroke={outline} strokeWidth={2} />
               <Ellipse x={250} y={335} radiusX={190} radiusY={45} fill={color} stroke={outline} strokeWidth={2} />

@@ -31,7 +31,9 @@ export function Simulator() {
   const [productId, setProductId] = useState(initial.id);
   const product = products.find((p) => p.id === productId)!;
   const [color, setColor] = useState(product.colors[0]);
-  const [face, setFace] = useState<Face>("front");
+  const [face, setFace] = useState<Face>(
+    (Object.keys(initial.faces).find((f) => !initial.colors[0].photos || initial.colors[0].photos[f as Face]) as Face) ?? "front",
+  );
   const [logos, setLogos] = useState<Partial<Record<Face, LogoPlacement>>>({});
   const [dark, setDark] = useState(false);
   const [zones, setZones] = useState(true);
@@ -45,11 +47,14 @@ export function Simulator() {
 
   const zone = product.faces[face];
   const logo = logos[face];
-  const faces = useMemo(() => Object.keys(product.faces) as Face[], [product]);
+  const faces = useMemo(
+    () => (Object.keys(product.faces) as Face[]).filter((f) => !color.photos || color.photos[f]),
+    [product, color],
+  );
 
   const pickProduct = (id: string) => {
     const p = products.find((x) => x.id === id)!;
-    setProductId(id); setColor(p.colors[0]); setFace("front"); setLogos({}); setOriginals({}); setZoom(1);
+    setProductId(id); setColor(p.colors[0]); setFace((Object.keys(p.faces).find((f) => !p.colors[0].photos || p.colors[0].photos[f as Face]) as Face) ?? "front"); setLogos({}); setOriginals({}); setZoom(1);
   };
 
   const onFile = useCallback(async (f?: File) => {
@@ -87,7 +92,7 @@ export function Simulator() {
       <div className="mt-8 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[minmax(0,1fr)_420px]">
         {/* Aperçu — en haut sur mobile, à gauche sur desktop */}
         <div className="lg:sticky lg:top-24 lg:self-start">
-          <PreviewStage ref={stage} productId={productId} color={color.hex} zone={zone} logo={logo}
+          <PreviewStage ref={stage} productId={productId} color={color.hex} photo={color.photos?.[face]} zone={zone} logo={logo}
             darkBg={dark} showZone={zones} zoom={zoom} onChange={(l) => setLogos((s) => ({ ...s, [face]: l }))} />
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {faces.map((f) => (
@@ -102,7 +107,7 @@ export function Simulator() {
             <button className="btn btn-light !min-h-11 !px-4" onClick={download} disabled={!logo}><Download size={16} /> PNG</button>
           </div>
           <p className="mt-3 text-xs text-muted">
-            Simulation indicative et non contractuelle (silhouettes 2D, vues avant/arrière — pas de rotation 3D tant qu'aucun modèle 3D n'est fourni). Le visuel est validé avec vous avant production.
+            Simulation indicative et non contractuelle, sur photos produit (vues fixes avant, arrière et côtés ; pas de rotation 3D tant qu'aucun modèle 3D n'est fourni). Le visuel est validé avec vous avant production.
           </p>
         </div>
 
@@ -119,7 +124,7 @@ export function Simulator() {
           <Section n="02" title={`Couleur — ${color.name}`}>
             <div className="flex flex-wrap gap-3">
               {product.colors.map((c) => (
-                <button key={c.hex} onClick={() => setColor(c)} aria-label={c.name} aria-pressed={c.hex === color.hex}
+                <button key={c.hex} onClick={() => { setColor(c); if (c.photos && !c.photos[face]) setFace(faces[0]); }} aria-label={c.name} aria-pressed={c.hex === color.hex}
                   className={`h-11 w-11 rounded-full border transition ${c.hex === color.hex ? "ring-2 ring-black ring-offset-2" : "border-line"}`}
                   style={{ background: c.hex }} />
               ))}
