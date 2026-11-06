@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
+import { Clients } from "@/components/home/Clients";
 import { products } from "@/config/products";
 
 const steps = [
@@ -19,6 +20,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <Clients />
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6" aria-labelledby="produits">
         <p className="eyebrow">Nos produits personnalisables</p>
