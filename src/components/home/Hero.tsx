@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
+import { Shirt, FileText } from "lucide-react";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -11,20 +12,26 @@ export function Hero() {
     transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] as const },
   });
   return (
-    <section className="grid min-h-[calc(100svh-72px)] place-items-center bg-white px-4">
-      <div className="flex w-full max-w-5xl flex-col items-center">
-        <motion.div {...fade(0.05, 24)} className="w-full">
-          <Image src="/brand/logo-noir.png" alt="L'Atelier de l'Impression" width={956} height={187} priority
-            sizes="(max-width: 1024px) 90vw, 1000px" className="mx-auto h-auto w-[90%] max-w-[900px]" />
+    <section className="bg-white" aria-label="Présentation">
+      <h1 className="sr-only">L'Atelier de l'Impression — impression et personnalisation à Aulnay-sous-Bois</h1>
+      <motion.div {...fade(0.05, 24)} className="mx-auto w-full max-w-[1672px]">
+        <Image
+          src="/hero/hero.webp" width={1672} height={812} priority sizes="100vw"
+          alt="L'Atelier de l'Impression : vestes, sweats, T-shirts, polos, pantalons, casquettes, mugs, tote bags et sacs à dos personnalisés"
+          className="h-auto w-full [mask-image:linear-gradient(to_bottom,#000_90%,transparent)]"
+        />
+      </motion.div>
+      <div className="mx-auto -mt-2 flex w-full max-w-5xl flex-col items-stretch justify-center gap-3 px-4 pb-14 sm:-mt-4 sm:flex-row sm:gap-4 sm:pb-20">
+        <motion.div {...fade(0.5)}>
+          <Link href="/personnalisation" className="btn btn-dark w-full sm:w-auto">
+            <Shirt size={18} /> Personnaliser un produit
+          </Link>
         </motion.div>
-        <div className="mt-12 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-14 sm:w-auto sm:flex-row sm:gap-4">
-          <motion.div {...fade(0.5)}>
-            <Link href="/personnalisation" className="btn btn-dark w-full sm:w-auto">Personnaliser un produit</Link>
-          </motion.div>
-          <motion.div {...fade(0.65)}>
-            <Link href="/personnalisation#devis" className="btn btn-light w-full sm:w-auto">Demander un devis</Link>
-          </motion.div>
-        </div>
+        <motion.div {...fade(0.65)}>
+          <Link href="/personnalisation#devis" className="btn btn-light w-full sm:w-auto">
+            <FileText size={18} /> Demander un devis
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
