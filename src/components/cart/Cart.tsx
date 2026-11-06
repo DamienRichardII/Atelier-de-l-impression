@@ -64,7 +64,7 @@ export function Cart() {
 
       <form onSubmit={submit} className="card h-fit p-5 sm:p-6">
         <p className="flex justify-between text-lg font-semibold"><span>Total</span><span>{ready && payable ? eur(total) : "—"}</span></p>
-        <p className="mt-1 text-xs text-muted">Retrait à l'atelier, Aulnay-sous-Bois. La livraison n'est pas proposée en ligne : contactez-nous.</p>
+        <p className="mt-1 text-xs text-muted">Retrait à l'atelier, Aulnay-sous-Bois.</p>
         {ready && (!enabled || !payable) ? (
           <div className="mt-5 rounded-2xl border border-line p-4 text-sm">
             Le paiement en ligne n'est pas disponible pour ces articles. <Link href="/personnalisation#devis" className="underline">Demandez un devis</Link>.

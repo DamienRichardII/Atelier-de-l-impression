@@ -85,10 +85,8 @@ export function QuoteForm({ product, color, logos, originals, snapshot }: Props)
             <label className="text-sm">Type de client
               <select name="customerType" className={input}><option value="particulier">Particulier</option><option value="professionnel">Professionnel</option></select>
             </label>
-            <label className="text-sm">Livraison ou retrait
-              <select name="delivery" className={input}><option value="retrait">Retrait à l'atelier</option><option value="livraison">Livraison</option></select>
-            </label>
-            <label className="text-sm">Adresse (si livraison)<input name="address" className={input} autoComplete="street-address" /></label>
+            <p className="text-sm sm:col-span-2">Remise de la commande<span className="mt-1 block min-h-12 rounded-xl border border-line bg-mist px-4 py-3 text-base">Retrait à l'atelier, Aulnay-sous-Bois</span></p>
+            <input type="hidden" name="delivery" value="retrait" />
           </div>
           <label className="mt-4 block text-sm">Fichiers complémentaires (facultatif)<input name="extra" type="file" multiple className="mt-1 block w-full text-sm" /></label>
           {/* Anti-spam : champ piège invisible */}
