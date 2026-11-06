@@ -13,6 +13,8 @@ export interface ColorOption {
 
 export interface ProductConfig {
   id: string;
+  /** Famille d'affichage : les familles à plusieurs modèles ouvrent un menu déroulant. */
+  family: string;
   name: string;
   colors: ColorOption[];
   sizes: string[];
@@ -39,7 +41,7 @@ export const formatPriceFrom = (n: number) =>
 
 export const products: ProductConfig[] = [
   {
-    id: "t-shirt", name: "T-shirt Unisex",
+    id: "t-shirt", family: "T-shirts", name: "T-shirt Unisex",
     description: "T-shirt col rond lycra, manches courtes, 190-200 g/m².",
     colors: [
       { name: "Noir", hex: "#111111", photos: ph("t-shirt", "noir", ["front", "back", "left", "right"]) },
@@ -55,7 +57,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
   },
   {
-    id: "t-shirt-oversize", name: "T-shirt ample 220 g",
+    id: "t-shirt-oversize", family: "T-shirts", name: "T-shirt ample 220 g",
     description: "T-shirt col rond, manches courtes, 220 g/m², coupe ample.",
     colors: [
       { name: "Blanc", hex: "#EAEAEA", photos: ph("t-shirt-oversize", "blanc", ["front"]) },
@@ -65,7 +67,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 25, w: 32, h: 28 } },
   },
   {
-    id: "t-shirt-chicago", name: "T-shirt Chicago",
+    id: "t-shirt-chicago", family: "T-shirts", name: "T-shirt Chicago",
     description: "Chicago : t-shirt oversize col rond, coton, manches courtes, 240 g/m².",
     colors: [
       { name: "Naturel", hex: "#EEEDE9", photos: ph("t-shirt-chicago", "naturel", ["front"]) },
@@ -82,13 +84,13 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {
-    id: "capuche", name: "Sweat à capuche",
+    id: "capuche", family: "Sweats à capuche", name: "Sweat à capuche",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("capuche", "noir", ["front", "back", "left", "right"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 22,
     faces: { front: { x: 34, y: 34, w: 32, h: 19 }, back: { x: 33, y: 38, w: 34, h: 36 }, left: { x: 38, y: 26, w: 22, h: 28 }, right: { x: 37, y: 26, w: 22, h: 28 } },
   },
   {
-    id: "capuche-320", name: "Sweat à capuche 320 g",
+    id: "capuche-320", family: "Sweats à capuche", name: "Sweat à capuche 320 g",
     description: "Sweat à capuche manches longues, poche kangourou, capuche doublée, cordon de serrage ton sur ton finition métal. 70 % coton, 30 % polyester, molleton 320 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#222222", photos: ph("capuche-320", "noir", ["front"]) },
@@ -108,7 +110,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 32, y: 36, w: 34, h: 22 }, back: { x: 30, y: 38, w: 40, h: 36 } },
   },
   {
-    id: "capuche-zip", name: "Sweat zippé à capuche 320 g",
+    id: "capuche-zip", family: "Sweats à capuche", name: "Sweat zippé à capuche 320 g",
     description: "Sweat à capuche zippé manches longues, 2 poches latérales, capuche doublée, cordon de serrage ton sur ton, fermeture éclair YKK. 70 % coton peigné, 30 % polyester, molleton 320 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#1E1E1E", photos: ph("capuche-zip", "noir", ["front", "back"]) },
@@ -123,7 +125,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 56, y: 24, w: 14, h: 10 }, back: { x: 26.5, y: 39.5, w: 46.5, h: 38 } },
   },
   {
-    id: "sweat-320", name: "Sweat col rond 320 g",
+    id: "sweat-320", family: "Sweats col rond", name: "Sweat col rond 320 g",
     description: "Sweat-shirt col rond avec bande de propreté, sans étiquette. 70 % coton, 30 % polyester, molleton 320 g/m². Tailles adultes XS à 2XL.",
     colors: [
       { name: "Noir", hex: "#1B1B1B", photos: ph("sweat-320", "noir", ["front", "back"]) },
@@ -137,14 +139,14 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 35, y: 28, w: 30, h: 19 }, back: { x: 33, y: 30, w: 34, h: 34 } },
   },
   {
-    id: "sweat", name: "Sweat col rond",
+    id: "sweat", family: "Sweats col rond", name: "Sweat col rond",
     // Pas de photo de face fournie pour ce modèle : seules les vues dos et côté gauche sont proposées.
     colors: [{ name: "Gris perle", hex: "#CFCDCA", photos: ph("sweat", "gris", ["back", "left"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null,
     faces: { back: { x: 34, y: 17, w: 32, h: 42 }, left: { x: 41, y: 20, w: 22, h: 34 } },
   },
   {
-    id: "polo", name: "Polo",
+    id: "polo", family: "Polo", name: "Polo",
     description: "Polo manches courtes en maille piquée, deux rayures en relief au col, fentes latérales, bouton ton sur ton. 100 % coton, 210-220 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) },
@@ -157,7 +159,7 @@ export const products: ProductConfig[] = [
 
   },
   {
-    id: "casquette", name: "Casquette 5 pans",
+    id: "casquette", family: "Casquettes & bonnets", name: "Casquette 5 pans",
     description: "Casquette 5 pans : panneau avant structuré, visière préformée en polyéthylène recyclé, fermeture ajustable par boucle métal, œillets de ventilation. Tour de tête 58 cm.",
     colors: [
       { name: "Noir", hex: "#1F1F21", photos: ph("casquette", "noir", ["front", "back"]) },
@@ -176,7 +178,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "casquette-patch", name: "Casquette à patch",
+    id: "casquette-patch", family: "Casquettes & bonnets", name: "Casquette à patch",
     description: "Casquette 5 pans avec patch amovible : visière pré-courbée, empiècement dos en Rip-Strip™, œillets cousus, ajustable par patte, étiquette détachable. Compatible patchs BF841 et BF600. Tour de tête 58 cm.",
     colors: [
       { name: "Noir", hex: "#1F1F1F", photos: ph("casquette-patch", "noir", ["front", "back"]) },
@@ -189,7 +191,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "gilet", name: "Gilet softshell",
+    id: "gilet", family: "Gilet softshell", name: "Gilet softshell",
     description: "Bodywarmer softshell 3 couches : tissu contrecollé avec membrane respirante et imperméable. 2 poches zippées latérales, 1 poche poitrine. Respirabilité jusqu'à 14 232 g/m²/24h, imperméabilité jusqu'à 8 173 mmH₂O.",
     colors: [
       { name: "Noir", hex: "#111111", photos: pv("gilet", ["front", "back"]) },
@@ -204,7 +206,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
   },
   {
-    id: "bonnet", name: "Bonnet",
+    id: "bonnet", family: "Casquettes & bonnets", name: "Bonnet",
     description: "Bonnet Thinsulate™ avec patch amovible : tissu double épaisseur, empiècement coton sergé Rip-Strip™ interchangeable (compatible patchs BF600). 100 % acrylique Soft-Touch, doublure Thinsulate™ 65 % polypropylène, 35 % polyester.",
     colors: [
       { name: "Noir", hex: "#1C1C1C", photos: ph("bonnet", "noir", ["three-quarter"]) },
@@ -217,7 +219,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "pantalon", name: "Pantalon",
+    id: "pantalon", family: "Pantalon", name: "Pantalon",
     colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
     faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
@@ -231,21 +233,21 @@ export const products: ProductConfig[] = [
  */
 export const productsHidden: ProductConfig[] = [
   {
-    id: "tote-bag", name: "Tote bag",
+    id: "tote-bag", family: "Tote bag", name: "Tote bag",
     colors: [{ name: "Écru", hex: "#E6DCC8", photos: pv("tote-bag", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.5,
     faces: { front: { x: 31, y: 52, w: 38, h: 30 }, back: { x: 31, y: 52, w: 38, h: 30 }, side: null, "three-quarter": null },
 
   },
   {
-    id: "mug", name: "Mug",
+    id: "mug", family: "Mug", name: "Mug",
     colors: [{ name: "Blanc", hex: "#FFFFFF", photos: pv("mug", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.5,
     faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 }, side: null, "three-quarter": null },
 
   },
   {
-    id: "sac-a-dos", name: "Sac à dos",
+    id: "sac-a-dos", family: "Sac à dos", name: "Sac à dos",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("sac-a-dos", "base", ["front", "side", "back"]) }],
     sizes: ["Unique"], price: null, maxZoom: 1.25,
     faces: { front: { x: 30, y: 33, w: 40, h: 18 }, side: { x: 38, y: 34, w: 22, h: 22 }, back: { x: 40, y: 34, w: 20, h: 24 } },
