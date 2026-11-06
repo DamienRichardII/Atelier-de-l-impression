@@ -84,12 +84,6 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {
-    id: "capuche", family: "Sweats à capuche", name: "Sweat à capuche",
-    colors: [{ name: "Noir", hex: "#111111", photos: ph("capuche", "noir", ["front", "back", "left", "right"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 22,
-    faces: { front: { x: 34, y: 34, w: 32, h: 19 }, back: { x: 33, y: 38, w: 34, h: 36 }, left: { x: 38, y: 26, w: 22, h: 28 }, right: { x: 37, y: 26, w: 22, h: 28 } },
-  },
-  {
     id: "capuche-320", family: "Sweats à capuche", name: "Sweat à capuche 320 g",
     description: "Sweat à capuche manches longues, poche kangourou, capuche doublée, cordon de serrage ton sur ton finition métal. 70 % coton, 30 % polyester, molleton 320 g/m², sans étiquette.",
     colors: [
