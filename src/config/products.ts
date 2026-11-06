@@ -21,6 +21,8 @@ export interface ProductConfig {
   /** Zoom max cohérent avec la résolution réelle des photos (au-delà : pixellisation). */
   maxZoom?: number;
   price: number | null;
+  /** Prix « à partir de » (€ TTC indicatif) communiqué par le client. Le prix final est confirmé par devis. */
+  priceFrom?: number;
 }
 
 const ph = (dir: string, c: string, faces: Face[]) =>
@@ -30,17 +32,20 @@ const ph = (dir: string, c: string, faces: Face[]) =>
 const pv = (dir: string, faces: Face[]) =>
   Object.fromEntries(faces.map((f) => [f, `/products/${dir}/${f}.webp`])) as Partial<Record<Face, string>>;
 
+export const formatPriceFrom = (n: number) =>
+  `À partir de ${new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n)}`;
+
 export const products: ProductConfig[] = [
   {
     id: "t-shirt", name: "T-shirt",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("t-shirt", "noir", ["front", "back", "left", "right"]) }],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
   },
   {
     id: "capuche", name: "Sweat à capuche",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("capuche", "noir", ["front", "back", "left", "right"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 22,
     faces: { front: { x: 34, y: 34, w: 32, h: 19 }, back: { x: 33, y: 38, w: 34, h: 36 }, left: { x: 38, y: 26, w: 22, h: 28 }, right: { x: 37, y: 26, w: 22, h: 28 } },
   },
   {
@@ -53,7 +58,7 @@ export const products: ProductConfig[] = [
   {
     id: "polo", name: "Polo",
     colors: [{ name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 17, maxZoom: 1.5,
     faces: { front: { x: 33, y: 40, w: 34, h: 22 }, side: { x: 51, y: 27, w: 13, h: 14 }, back: { x: 33, y: 35, w: 34, h: 32 }, "three-quarter": null },
 
   },

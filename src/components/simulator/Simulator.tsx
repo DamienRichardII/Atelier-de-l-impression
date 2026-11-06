@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Download, Eraser, Move, RotateCcw, Trash2, Upload, ZoomIn, ZoomOut, Moon, Sun, Grid2x2 } from "lucide-react";
-import { products, type Face } from "@/config/products";
+import { products, formatPriceFrom, type Face } from "@/config/products";
 import type { LogoPlacement } from "@/lib/customization/types";
 import { loadLogoFile, removeWhiteBackground } from "@/lib/customization/svg";
 import type { PreviewHandle } from "./PreviewStage";
@@ -121,6 +121,9 @@ export function Simulator() {
                   className={`rounded-xl border px-2 py-3 text-sm transition ${p.id === productId ? "border-black bg-black text-white" : "border-line hover:border-black"}`}>{p.name}</button>
               ))}
             </div>
+            <p className="mt-3 text-sm text-muted">
+              {product.priceFrom ? `${formatPriceFrom(product.priceFrom)} · tarif indicatif, confirmé par devis.` : "Tarif sur devis."}
+            </p>
           </Section>
           <Section n="02" title={`Couleur — ${color.name}`}>
             <div className="flex flex-wrap gap-3">

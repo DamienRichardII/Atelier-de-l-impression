@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { Clients } from "@/components/home/Clients";
-import { products } from "@/config/products";
+import { products, formatPriceFrom } from "@/config/products";
 
 const steps = [
   ["01", "Choisissez", "Sélectionnez votre support et sa couleur."],
@@ -39,7 +39,8 @@ export default function Home() {
                 );
               })()}
               <p className="mt-4 font-medium">{p.name}</p>
-              <p className="text-sm text-muted">Personnaliser →</p>
+              <p className="text-sm text-muted">{p.priceFrom ? formatPriceFrom(p.priceFrom) : "Sur devis"}</p>
+              <p className="text-sm">Personnaliser →</p>
             </Link>
           ))}
         </div>
