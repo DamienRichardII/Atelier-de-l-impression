@@ -22,6 +22,8 @@ const MESSAGES: Record<string, [string, "ok" | "bad"]> = {
   ok: ["Enregistré.", "ok"], erreur: ["L'enregistrement a échoué.", "bad"], "prix-invalide": ["Prix invalide.", "bad"],
   "statut-ok": ["Statut mis à jour.", "ok"], "statut-invalide": ["Statut invalide.", "bad"], "non-payee": ["Cette commande n'est pas payée : action impossible.", "bad"],
   "mail-ok": ["E-mail envoyé.", "ok"], "mail-echec": ["L'envoi de l'e-mail a échoué : voir le journal.", "bad"], "type-invalide": ["Type d'e-mail inconnu.", "bad"],
+  "inscription-envoyee": ["Si cette adresse est autorisée, un e-mail de confirmation vient d'être envoyé. Ouvrez le lien qu'il contient, puis connectez-vous.", "ok"],
+  "compte-confirme": ["Compte confirmé. Vous pouvez vous connecter.", "ok"], "lien-invalide": ["Ce lien est invalide ou expiré. Refaites une demande de création de compte.", "bad"],
   "sync-ok": ["Paiement relu chez SumUp.", "ok"], "sync-echec": ["SumUp n'a pas répondu.", "bad"],
 };
 export function Notice({ msg, mail }: { msg?: string; mail?: string }) {

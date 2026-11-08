@@ -9,6 +9,8 @@ import { rateLimit } from "@/lib/rate-limit";
 import { syncOrderByReference } from "@/lib/payments/sync";
 import { deliver } from "@/lib/email/log";
 import { orderPaidMails, pickupMail, type OrderForMail } from "@/lib/email/messages";
+import { confirmLink, readConfirmToken } from "@/lib/admin/confirm";
+import { esc, tpl } from "@/lib/email/send";
 import { ORDER_STATUSES } from "@/lib/admin/statuses";
 import { products as catalog } from "@/config/products";
 
@@ -28,9 +30,60 @@ export async function login(_: { error?: string } | undefined, fd: FormData): Pr
   // Vérification du mot de passe par Supabase Auth ; la session Supabase obtenue est aussitôt abandonnée.
   const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
   const { error } = await auth.auth.signInWithPassword({ email, password });
-  if (error) return bad;
+  if (error) return /confirm/i.test(error.message) ? { error: "Adresse e-mail non confirmée : ouvrez le lien reçu par e-mail." } : bad;
   await setSession(email);
   redirect("/admin");
+}
+
+/** Création d'un compte administrateur : réservée aux adresses de la liste d'accès ; confirmation par e-mail, lien vers le site (jamais vers Supabase). */
+export async function signup(_: { error?: string } | undefined, fd: FormData): Promise<{ error?: string }> {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (!rateLimit(`admin-signup:${ip}`, 5)) return { error: "Trop de tentatives. Réessayez dans quelques minutes." };
+  const email = String(fd.get("email") ?? "").trim().toLowerCase();
+  const password = String(fd.get("password") ?? ""); const again = String(fd.get("again") ?? "");
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "Adresse e-mail invalide." };
+  if (password.length < 10) return { error: "Le mot de passe doit contenir au moins 10 caractères." };
+  if (password !== again) return { error: "Les deux mots de passe ne correspondent pas." };
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const db = supabaseAdmin();
+  if (!url || !key || !db) return { error: "Service non configuré." };
+  // Réponse identique que l'adresse soit autorisée ou non : on ne révèle pas qui a accès.
+  const { data: allowed } = await db.from("atelier_admin_emails").select("email").eq("email", email).maybeSingle();
+  if (allowed) {
+    const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+    let send = false;
+    const { error } = await auth.auth.admin.createUser({ email, password, email_confirm: false });
+    if (!error) send = true;
+    else {
+      // Compte déjà existant : on renvoie le lien seulement s'il n'est pas encore confirmé, sans toucher au mot de passe.
+      const { data: list } = await auth.auth.admin.listUsers({ page: 1, perPage: 1000 });
+      const u = list?.users.find((x) => x.email?.toLowerCase() === email);
+      if (u && !u.email_confirmed_at) send = true;
+    }
+    if (send) {
+      const link = confirmLink(email);
+      await deliver(db, null, {
+        kind: "admin_confirmation", to: email, subject: "Confirmez votre compte administrateur — L'Atelier de l'Impression",
+        html: tpl.shell("Confirmez votre compte", `<p style="font-size:14px;line-height:1.6">Un compte administrateur a été demandé pour <strong>${esc(email)}</strong>. Pour l'activer, confirmez votre adresse e-mail :</p><p style="margin:20px 0"><a href="${link}" style="background:#000;color:#fff;padding:12px 20px;border-radius:12px;text-decoration:none;font-size:14px">Confirmer mon compte</a></p><p style="font-size:12px;color:#737373">Ce lien est valable 24 heures. Si vous n'êtes pas à l'origine de cette demande, ignorez ce message.</p>`),
+      });
+    }
+  }
+  redirect("/admin/connexion?msg=inscription-envoyee");
+}
+
+/** Confirmation du compte depuis le lien reçu par e-mail (bouton, pour résister aux scanners de liens). */
+export async function confirmAccount(fd: FormData) {
+  const email = readConfirmToken(String(fd.get("t") ?? ""));
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.SUPABASE_SERVICE_ROLE_KEY; const db = supabaseAdmin();
+  if (!email || !url || !key || !db) redirect("/admin/connexion?msg=lien-invalide");
+  const { data: allowed } = await db.from("atelier_admin_emails").select("email").eq("email", email).maybeSingle();
+  if (!allowed) redirect("/admin/connexion?msg=lien-invalide");
+  const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const { data: list } = await auth.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  const u = list?.users.find((x) => x.email?.toLowerCase() === email);
+  if (!u) redirect("/admin/connexion?msg=lien-invalide");
+  const { error } = await auth.auth.admin.updateUserById(u.id, { email_confirm: true });
+  redirect(`/admin/connexion?msg=${error ? "lien-invalide" : "compte-confirme"}`);
 }
 
 export async function logout() { await clearSession(); redirect("/admin/connexion"); }
