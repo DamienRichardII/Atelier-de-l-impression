@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { AdminShell, Badge, Notice, KIND_LABEL, mailLabel, mailTone, payLabel, payTone, eur, dt } from "@/components/admin/ui";
+import { itemFiles } from "@/lib/admin/files";
 import { ORDER_STATUSES } from "@/lib/admin/statuses";
 import { resendEmail, resyncPayment, setOrderStatus } from "@/app/admin/actions";
 
-type Line = { name: string; color: string; qty: number; line_cents: number; sizes: Record<string, number> };
+type Line = { name: string; color: string; qty: number; line_cents: number; sizes: Record<string, number>; assetsId?: string | null };
 
 async function Detail({ params, searchParams }: { params: Promise<{ ref: string }>; searchParams: Promise<{ msg?: string; mail?: string }> }) {
   await requireAdmin();
@@ -20,6 +21,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ ref: string 
   ]);
   const c = o.customer as { firstName: string; lastName: string; email: string; phone: string };
   const items = (o.items as Line[]) ?? [];
+  const files = await Promise.all(items.map((l) => itemFiles(db, l.assetsId)));
   const paid = o.payment_status === "paid";
   const btn = "rounded-xl border border-line px-3 py-2 text-sm hover:border-black";
   return (
@@ -36,7 +38,11 @@ async function Detail({ params, searchParams }: { params: Promise<{ ref: string 
           <p className="text-sm">{c.firstName} {c.lastName}<br /><a className="underline" href={`mailto:${c.email}`}>{c.email}</a><br /><a className="underline" href={`tel:${c.phone}`}>{c.phone}</a></p>
           <h3 className="mt-6 mb-3 font-semibold">Articles</h3>
           <ul className="space-y-2 text-sm">
-            {items.map((l, i) => <li key={i}><strong>{l.name}</strong> — {l.color}<br /><span className="text-muted">{Object.entries(l.sizes ?? {}).map(([s, n]) => `${s} × ${n}`).join(", ")} · {l.qty} pièce(s) · {eur(l.line_cents)}</span></li>)}
+            {items.map((l, i) => <li key={i}><strong>{l.name}</strong> — {l.color}<br /><span className="text-muted">{Object.entries(l.sizes ?? {}).map(([s, n]) => `${s} × ${n}`).join(", ")} · {l.qty} pièce(s) · {eur(l.line_cents)}</span>
+              <span className="mt-2 flex flex-wrap gap-2">
+                {files[i].map((f) => <a key={f.url} href={f.url} download className="rounded-xl border border-line px-3 py-1.5 text-xs hover:border-black">Télécharger : {f.label}</a>)}
+                {!files[i].length && <span className="text-xs text-muted">Aucun fichier retrouvé pour cet article.</span>}
+              </span></li>)}
           </ul>
           <p className="mt-4 border-t border-line pt-3 text-sm font-semibold">Total : {eur(o.total_cents)}</p>
         </div>

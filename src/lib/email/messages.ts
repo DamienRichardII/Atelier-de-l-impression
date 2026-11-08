@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { esc, eur, notifyAddress, sendEmail, tpl } from "./send";
 import { deliver, type Mail } from "./log";
+import { siteUrl } from "@/lib/admin/confirm";
 
 const row = (k: string, v: string) => `<tr><td style="padding:4px 12px 4px 0;color:#737373;font-size:13px;vertical-align:top">${esc(k)}</td><td style="padding:4px 0;font-size:14px">${v}</td></tr>`;
 const table = (rows: string) => `<table role="presentation" cellpadding="0" cellspacing="0">${rows}</table>`;
@@ -21,7 +22,7 @@ export function orderPaidMails(o: OrderForMail): Mail[] {
       kind: "notification_atelier", to: notifyAddress(), replyTo: o.customer.email, subject: `Commande payée ${o.reference} — ${eur(o.total_cents)}`,
       html: tpl.shell("Nouvelle commande payée", body + `<p style="margin:16px 0 4px;font-size:13px;color:#737373">Client</p>` + table(
         row("Nom", esc(`${o.customer.firstName} ${o.customer.lastName}`)) + row("E-mail", esc(o.customer.email)) + row("Téléphone", esc(o.customer.phone)) + row("Remise", "Retrait à l'atelier"))
-        + `<p style="font-size:12px;color:#737373;margin-top:16px">Fichiers du logo et aperçu : stockage privé, dossier cart/ (voir la commande en base).</p>`),
+        + `<p style="font-size:13px;margin-top:16px">Logo du client et aperçu à télécharger : <a href="${siteUrl()}/admin/commandes/${encodeURIComponent(o.reference)}">ouvrir la commande dans l'administration</a>.</p>`),
     },
     {
       kind: "confirmation_client", to: o.customer.email, subject: `Paiement confirmé — commande ${o.reference}`,
