@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { Clients } from "@/components/home/Clients";
-import { products, formatPriceFrom } from "@/config/products";
+import { Suspense } from "react";
+import { formatPriceFrom } from "@/config/products";
+import { getProducts } from "@/lib/content/data";
 
 const steps = [
   ["01", "Choisissez", "Sélectionnez votre support et sa couleur."],
@@ -18,6 +20,31 @@ const faq = [
 
 export const metadata = { alternates: { canonical: "/" } };
 
+async function ProductGrid() {
+  const products = await getProducts();
+  return (
+    <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+      {products.map((p) => (
+        <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
+          {(() => {
+            const src = Object.values(p.colors[0].photos ?? {})[0];
+            return src ? (
+              <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
+                <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
+              </div>
+            ) : (
+              <div className="grid aspect-square place-items-center rounded-xl bg-mist text-xs text-muted">Photo à fournir</div>
+            );
+          })()}
+          <p className="mt-4 font-medium">{p.name}</p>
+          <p className="text-sm text-muted">{p.priceFrom ? formatPriceFrom(p.priceFrom) : "Nous contacter"}</p>
+          <p className="text-sm">Personnaliser →</p>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <>
@@ -27,25 +54,7 @@ export default function Home() {
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6" aria-labelledby="produits">
         <p className="eyebrow">Nos produits personnalisables</p>
         <h2 id="produits" className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Un support pour chaque projet</h2>
-        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {products.map((p) => (
-            <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
-              {(() => {
-                const src = Object.values(p.colors[0].photos ?? {})[0];
-                return src ? (
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
-                    <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
-                  </div>
-                ) : (
-                  <div className="grid aspect-square place-items-center rounded-xl bg-mist text-xs text-muted">Photo à fournir</div>
-                );
-              })()}
-              <p className="mt-4 font-medium">{p.name}</p>
-              <p className="text-sm text-muted">{p.priceFrom ? formatPriceFrom(p.priceFrom) : "Nous contacter"}</p>
-              <p className="text-sm">Personnaliser →</p>
-            </Link>
-          ))}
-        </div>
+        <Suspense fallback={<div className="mt-10 h-72 animate-pulse rounded-3xl bg-mist" />}><ProductGrid /></Suspense>
       </section>
 
       <div className="rule mx-auto max-w-7xl" />

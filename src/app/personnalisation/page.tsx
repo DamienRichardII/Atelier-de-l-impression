@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Simulator } from "@/components/simulator/Simulator";
+import { getProducts } from "@/lib/content/data";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/personnalisation" },
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   description: "Visualisez votre logo sur t-shirt, sweat, polo, casquette ou gilet, puis commandez en ligne. Aulnay-sous-Bois.",
 };
 
+async function Loaded() { return <Simulator products={await getProducts()} />; }
 export default function Page() {
-  return <Suspense><Simulator /></Suspense>;
+  return <Suspense><Loaded /></Suspense>;
 }

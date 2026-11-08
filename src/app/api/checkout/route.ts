@@ -1,3 +1,4 @@
+import { getProducts } from "@/lib/content/data";
 import { sidesOf } from "@/lib/cart/sides";
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   const { data: rows, error: pErr } = await db.from("atelier_products").select("id, price_cents, price_both_cents").in("id", ids).eq("active", true).eq("purchasable", true).gt("price_cents", 0);
   if (pErr) return NextResponse.json({ error: "Service momentanément indisponible." }, { status: 500 });
   const withSides = await Promise.all(input.items.map(async (i) => ({ ...i, sides: await sidesOf(db, i.assetsId) })));
-  const priced = priceCart(withSides, rows ?? []);
+  const priced = priceCart(withSides, rows ?? [], await getProducts());
   if (!priced.ok) return NextResponse.json({ error: priced.error }, { status: 400 });
 
   const reference = `CMD-${new Date().getFullYear()}-${randomUUID().slice(0, 6).toUpperCase()}`;

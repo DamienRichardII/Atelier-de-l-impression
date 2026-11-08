@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BadgeCheck, FileText, Headset, Store } from "lucide-react";
 import { PageHero, CtaBand } from "@/components/PageHero";
 import { services, techniques } from "@/config/prestations";
+import { getCovers } from "@/lib/content/data";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/prestations" },
@@ -17,10 +19,17 @@ const promises = [
   { icon: FileText, title: "Commande en ligne", text: "Paiement sécurisé" },
 ];
 
+const HERO = { title: "Nos prestations", text: "Des solutions d'impression, de personnalisation et de marquage adaptées à tous vos besoins." };
+
 export default function Page() {
+  return <Suspense fallback={<PageHero {...HERO} />}><Content /></Suspense>;
+}
+
+async function Content() {
+  const covers = await getCovers();
   return (
     <>
-      <PageHero title="Nos prestations" text="Des solutions d'impression, de personnalisation et de marquage adaptées à tous vos besoins." />
+      <PageHero {...HERO} image={covers.banniere} />
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
         <ul className="grid grid-cols-2 gap-6 lg:grid-cols-4">
@@ -43,10 +52,13 @@ export default function Page() {
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted">Une large gamme de supports à personnaliser pour les particuliers, les associations et les entreprises.</p>
         </div>
         <ul className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ title, text, icon: Icon, href }) => (
+          {services.map(({ key, title, text, icon: Icon, href }) => (
             <li key={title}>
               <Link href={href} className="card group flex h-full flex-col overflow-hidden transition hover:border-black">
-                <div className="grid h-36 place-items-center bg-mist"><Icon size={44} strokeWidth={1.25} /></div>
+                {covers[key]
+                  // eslint-disable-next-line @next/next/no-img-element
+                  ? <img src={covers[key]} alt="" loading="lazy" className="h-44 w-full object-cover sm:h-40" />
+                  : <div className="grid h-36 place-items-center bg-mist"><Icon size={44} strokeWidth={1.25} /></div>}
                 <div className="flex flex-1 items-end justify-between gap-4 p-5">
                   <div>
                     <h3 className="font-semibold">{title}</h3>

@@ -12,7 +12,7 @@ import { orderPaidMails, pickupMail, type OrderForMail } from "@/lib/email/messa
 import { confirmLink, readConfirmToken } from "@/lib/admin/confirm";
 import { esc, tpl } from "@/lib/email/send";
 import { ORDER_STATUSES } from "@/lib/admin/statuses";
-import { products as catalog } from "@/config/products";
+import { getProducts } from "@/lib/content/data";
 
 
 export async function login(_: { error?: string } | undefined, fd: FormData): Promise<{ error?: string }> {
@@ -112,6 +112,7 @@ export async function saveProduct(fd: FormData) {
 export async function saveCategory(fd: FormData) {
   await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
   const family = String(fd.get("family") ?? "");
+  const catalog = await getProducts();
   const ids = catalog.filter((p) => p.family === family).map((p) => p.id);
   if (!ids.length) redirect("/admin/produits?msg=erreur");
   const patch: Record<string, number> = {};
@@ -131,6 +132,7 @@ export async function saveCategory(fd: FormData) {
 
 export async function syncCatalog() {
   await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const catalog = await getProducts();
   const { data } = await db.from("atelier_products").select("id");
   const have = new Set((data ?? []).map((r) => r.id as string));
   const missing = catalog.filter((p) => !have.has(p.id)).map((p) => ({ id: p.id, name: p.name, category: "textile", purchasable: false, active: true }));

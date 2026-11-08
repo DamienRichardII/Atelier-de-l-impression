@@ -24,6 +24,8 @@ const MESSAGES: Record<string, [string, "ok" | "bad"]> = {
   "mail-ok": ["E-mail envoyé.", "ok"], "mail-echec": ["L'envoi de l'e-mail a échoué : voir le journal.", "bad"], "type-invalide": ["Type d'e-mail inconnu.", "bad"],
   "inscription-envoyee": ["Si cette adresse est autorisée, un e-mail de confirmation vient d'être envoyé. Ouvrez le lien qu'il contient, puis connectez-vous.", "ok"],
   "compte-confirme": ["Compte confirmé. Vous pouvez vous connecter.", "ok"], "lien-invalide": ["Ce lien est invalide ou expiré. Refaites une demande de création de compte.", "bad"],
+  "produit-ajoute": ["Produit publié : il apparaît dans le simulateur et sur l'accueil.", "ok"], "produit-retire": ["Produit retiré du site.", "ok"],
+  "galerie-ok": ["Photos ajoutées à la galerie.", "ok"], "photo-retiree": ["Photo retirée.", "ok"], "cover-retiree": ["Photo de couverture retirée.", "ok"],
   "sync-ok": ["Paiement relu chez SumUp.", "ok"], "sync-echec": ["SumUp n'a pas répondu.", "bad"],
 };
 export function Notice({ msg, mail }: { msg?: string; mail?: string }) {
@@ -41,16 +43,16 @@ export function Notice({ msg, mail }: { msg?: string; mail?: string }) {
   );
 }
 
-const LINKS = [["/admin", "Tableau de bord"], ["/admin/commandes", "Commandes"], ["/admin/logos", "Logos commandes"], ["/admin/bibliotheque", "Bibliothèque logos"], ["/admin/produits", "Prix et catalogue"], ["/admin/emails", "E-mails et alertes"]] as const;
+const LINKS = [["/admin", "Tableau de bord"], ["/admin/commandes", "Commandes"], ["/admin/logos", "Logos commandes"], ["/admin/bibliotheque", "Bibliothèque logos"], ["/admin/produits", "Prix et catalogue"], ["/admin/emails", "E-mails et alertes"], ["/admin/nouveau-produit", "Ajouter un produit"], ["/admin/galerie", "Galerie réalisations"], ["/admin/couvertures", "Couvertures prestations"]] as const;
 
 async function Nav() {
   const email = await currentAdmin();
   if (!email) return null;
   return (
-    <nav aria-label="Administration" className="mb-8 flex flex-wrap items-center gap-2 border-b border-line pb-4">
-      {LINKS.map(([href, label]) => <Link key={href} href={href} className="rounded-xl border border-line px-4 py-2 text-sm hover:border-black">{label}</Link>)}
-      <span className="ml-auto text-xs text-muted">{email}</span>
-      <form action={logout}><button className="rounded-xl border border-line px-4 py-2 text-sm hover:border-black">Déconnexion</button></form>
+    <nav aria-label="Administration" className="mb-8 flex items-center gap-2 overflow-x-auto border-b border-line pb-4 lg:flex-wrap lg:overflow-visible">
+      {LINKS.map(([href, label]) => <Link key={href} href={href} className="shrink-0 whitespace-nowrap rounded-xl border border-line px-4 py-2.5 text-sm hover:border-black">{label}</Link>)}
+      <span className="ml-auto hidden shrink-0 text-xs text-muted sm:inline">{email}</span>
+      <form action={logout} className="shrink-0"><button className="whitespace-nowrap rounded-xl border border-line px-4 py-2 text-sm hover:border-black">Déconnexion</button></form>
     </nav>
   );
 }

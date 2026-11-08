@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { realisationCategories, realisations, type RealisationCategory } from "@/config/realisations";
+import { realisationCategories, type Realisation, type RealisationCategory } from "@/config/realisations";
 
-export function Gallery() {
+export function Gallery({ realisations }: { realisations: Realisation[] }) {
   const [cat, setCat] = useState<RealisationCategory | "Tous">("Tous");
   const shown = cat === "Tous" ? realisations : realisations.filter((r) => r.category === cat);
   const chips = ["Tous", ...realisationCategories] as const;
@@ -28,7 +28,9 @@ export function Gallery() {
       <ul className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-3">
         {shown.map((r) => (
           <li key={r.src} className="relative aspect-square overflow-hidden rounded-2xl bg-mist">
-            <Image src={r.src} alt={r.alt} fill sizes="(min-width:1024px) 33vw, 50vw" className="object-cover" />
+            {r.src.startsWith("/") ? <Image src={r.src} alt={r.alt} fill sizes="(min-width:1024px) 33vw, 50vw" className="object-cover" />
+              // eslint-disable-next-line @next/next/no-img-element
+              : <img src={r.src} alt={r.alt} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />}
           </li>
         ))}
       </ul>

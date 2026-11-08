@@ -1,4 +1,4 @@
-import { products } from "@/config/products";
+import type { ProductConfig } from "@/config/products";
 
 export interface PriceRow { id: string; price_cents: number; price_both_cents?: number | null }
 export interface PricedLine {
@@ -11,6 +11,7 @@ export type PriceResult = { ok: true; lines: PricedLine[]; total_cents: number }
 export function priceCart(
   items: { productId: string; color: string; sizes: Record<string, number>; assetsId: string | null; sides: 1 | 2 }[],
   prices: PriceRow[],
+  products: ProductConfig[],
 ): PriceResult {
   const lines: PricedLine[] = [];
   for (const it of items) {

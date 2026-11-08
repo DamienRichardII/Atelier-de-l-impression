@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/session";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { AdminShell, Notice, th, td } from "@/components/admin/ui";
 import { saveCategory, saveProduct, syncCatalog } from "@/app/admin/actions";
-import { products as catalog } from "@/config/products";
+import { getProducts } from "@/lib/content/data";
 
 export const metadata = { title: "Prix et catalogue" };
 const field = "w-24 rounded-lg border border-line px-2 py-1.5 text-sm";
@@ -15,6 +15,7 @@ async function Products({ searchParams }: { searchParams: Promise<{ msg?: string
   const { msg } = await searchParams;
   const db = supabaseAdmin(); if (!db) return <p>Base non configurée.</p>;
   const { data } = await db.from("atelier_products").select("id, name, price_cents, price_both_cents, active, purchasable");
+  const catalog = await getProducts();
   const rows = new Map((data ?? []).map((r) => [r.id as string, r]));
   const families = [...new Set(catalog.map((p) => p.family))];
   return (

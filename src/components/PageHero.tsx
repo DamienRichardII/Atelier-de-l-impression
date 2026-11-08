@@ -2,9 +2,10 @@ import Link from "next/link";
 import { Wand2 } from "lucide-react";
 
 /** Bandeau noir de tête de page (maquette « Nos prestations / Nos réalisations »). */
-export function PageHero({ title, text }: { title: string; text: string }) {
+export function PageHero({ title, text, image }: { title: string; text: string; image?: string }) {
   return (
     <section className="relative overflow-hidden bg-black text-white">
+      {image && (/* eslint-disable-next-line @next/next/no-img-element */ <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-45" />)}
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[.07]"
         style={{ backgroundImage: "repeating-linear-gradient(115deg, #fff 0 1px, transparent 1px 38px)" }} />
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">

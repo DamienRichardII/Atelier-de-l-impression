@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Download, Eraser, Move, RotateCcw, Trash2, Upload, ZoomIn, ZoomOut, Moon, Sun, Grid2x2 } from "lucide-react";
-import { products, formatPriceFrom, type Face } from "@/config/products";
+import { formatPriceFrom, type Face, type ProductConfig } from "@/config/products";
 import type { LogoPlacement } from "@/lib/customization/types";
 import { loadLogoFile, removeWhiteBackground } from "@/lib/customization/svg";
 import type { PreviewHandle } from "./PreviewStage";
@@ -17,7 +17,7 @@ const PreviewStage = dynamic(() => import("./PreviewStage").then((m) => m.Previe
 
 const FACE_LABEL: Record<Face, string> = { front: "Avant", back: "Arrière", left: "Côté gauche", right: "Côté droit", side: "Côté", "three-quarter": "Trois quarts" };
 
-const families = products.reduce<{ name: string; items: typeof products }[]>((acc, p) => {
+const groupFamilies = (products: ProductConfig[]) => products.reduce<{ name: string; items: ProductConfig[] }[]>((acc, p) => {
   const f = acc.find((x) => x.name === p.family);
   if (f) f.items.push(p); else acc.push({ name: p.family, items: [p] });
   return acc;
@@ -32,7 +32,8 @@ function Section({ n, title, children }: { n: string; title: string; children: R
   );
 }
 
-export function Simulator() {
+export function Simulator({ products }: { products: ProductConfig[] }) {
+  const families = useMemo(() => groupFamilies(products), [products]);
   const { enabled: payOn, prices, pricesBoth } = usePrices();
   const params = useSearchParams();
   const initial = products.find((p) => p.id === params.get("produit")) ?? products[0];

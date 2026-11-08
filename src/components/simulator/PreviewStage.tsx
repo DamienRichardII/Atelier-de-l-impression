@@ -23,6 +23,7 @@ function useImg(src?: string) {
   useEffect(() => {
     if (!src) return void setImg(null);
     const i = new window.Image();
+    if (/^https?:/.test(src)) i.crossOrigin = "anonymous"; // photos hébergées ailleurs : nécessaire pour exporter l'aperçu
     i.onload = () => setImg(i);
     i.src = src;
   }, [src]);
