@@ -93,7 +93,7 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
   });
 
   const kind = kindOf(productId);
-  const isCap = productId === "casquette", isMug = productId === "mug";
+  const isCap = productId === "casquette";
   const outline = color.toLowerCase() === "#ffffff" ? "#d4d4d4" : "#000000";
 
   return (
@@ -109,11 +109,6 @@ export const PreviewStage = forwardRef<PreviewHandle, Props>(function PreviewSta
             <Group>
               <Path data="M90 330 Q90 120 250 120 Q410 120 410 330 Z" fill={color} stroke={outline} strokeWidth={2} />
               <Ellipse x={250} y={335} radiusX={190} radiusY={45} fill={color} stroke={outline} strokeWidth={2} />
-            </Group>
-          ) : isMug ? (
-            <Group>
-              <Rect x={130} y={140} width={240} height={300} cornerRadius={14} fill={color} stroke={outline} strokeWidth={2} />
-              <Path data="M370 200 Q460 200 460 290 Q460 380 370 380" stroke={outline} strokeWidth={22} />
             </Group>
           ) : (
             <Group>

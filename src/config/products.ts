@@ -53,7 +53,7 @@ export const products: ProductConfig[] = [
       { name: "Prune", hex: "#875262", photos: ph("t-shirt", "prune", ["front"]) },
       { name: "Rose pâle", hex: "#F4DBDE", photos: ph("t-shirt", "rose-pale", ["front"]) },
     ],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
   },
   {
@@ -63,7 +63,7 @@ export const products: ProductConfig[] = [
       { name: "Blanc", hex: "#EAEAEA", photos: ph("t-shirt-oversize", "blanc", ["front"]) },
       { name: "Noir", hex: "#2A2526", photos: ph("t-shirt-oversize", "noir", ["front"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
     faces: { front: { x: 34, y: 25, w: 32, h: 28 } },
   },
   {
@@ -80,7 +80,7 @@ export const products: ProductConfig[] = [
       { name: "Kaki délavé", hex: "#6F674A", photos: ph("t-shirt-chicago", "kaki", ["front"]) },
       { name: "Anthracite délavé", hex: "#4B4A4E", photos: ph("t-shirt-chicago", "anthracite", ["front"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
     faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {
@@ -99,7 +99,7 @@ export const products: ProductConfig[] = [
       { name: "Marron", hex: "#4F3834", photos: ph("capuche-320", "marron", ["front", "back"]) },
       { name: "Mauve", hex: "#BF85AE", photos: ph("capuche-320", "mauve", ["front", "back"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 25,
     // Vues de dos fournies pour tous les coloris sauf noir et bordeaux.
     faces: { front: { x: 32, y: 36, w: 34, h: 22 }, back: { x: 30, y: 38, w: 40, h: 36 } },
   },
@@ -114,7 +114,7 @@ export const products: ProductConfig[] = [
       { name: "Bleu roi", hex: "#0B5FC4", photos: ph("capuche-zip", "bleu-roi", ["front", "back"]) },
       { name: "Bordeaux", hex: "#7A1426", photos: ph("capuche-zip", "bordeaux", ["front", "back"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 25,
     // Face : cœur de poitrine (le zip coupe la face en deux). Dos : grande zone.
     faces: { front: { x: 56, y: 24, w: 14, h: 10 }, back: { x: 26.5, y: 39.5, w: 46.5, h: 38 } },
   },
@@ -129,7 +129,7 @@ export const products: ProductConfig[] = [
       { name: "Beige", hex: "#EBCFA8", photos: ph("sweat-320", "beige", ["front", "back"]) },
       { name: "Blanc", hex: "#F5F5F6", photos: ph("sweat-320", "blanc", ["front", "back"]) },
     ],
-    sizes: ["XS", "S", "M", "L", "XL", "2XL"], price: null,
+    sizes: ["XS", "S", "M", "L", "XL", "2XL"], price: null, priceFrom: 25,
     faces: { front: { x: 35, y: 28, w: 30, h: 19 }, back: { x: 33, y: 30, w: 34, h: 34 } },
   },
   {
@@ -159,7 +159,7 @@ export const products: ProductConfig[] = [
       { name: "Vert bouteille", hex: "#133228", photos: ph("casquette", "vert-bouteille", ["front"]) },
       { name: "Vert militaire", hex: "#44473C", photos: ph("casquette", "vert-militaire", ["front"]) },
     ],
-    sizes: ["Unique"], price: null, maxZoom: 1.5,
+    sizes: ["Unique"], price: null, priceFrom: 15, maxZoom: 1.5,
     // Nouvelle série de photos (visière à droite) : la vue de côté d'origine n'est plus proposée.
     faces: { front: { x: 39, y: 46.5, w: 27.5, h: 17.5 }, back: { x: 38, y: 42, w: 23.5, h: 17.5 } },
   },
@@ -173,7 +173,7 @@ export const products: ProductConfig[] = [
       { name: "Sable", hex: "#887D5F", photos: ph("casquette-patch", "sable", ["front"]) },
       { name: "Camouflage", hex: "#37372B", photos: ph("casquette-patch", "camo", ["front"]) },
     ],
-    sizes: ["Unique"], price: null, maxZoom: 1.25,
+    sizes: ["Unique"], price: null, priceFrom: 15, maxZoom: 1.25,
     faces: { front: { x: 47.5, y: 42, w: 28.5, h: 21 }, back: { x: 44, y: 43, w: 30, h: 14 } },
   },
 
@@ -189,7 +189,7 @@ export const products: ProductConfig[] = [
       // Rouge : seule la vue dos a été fournie.
       { name: "Rouge", hex: "#E72C44", photos: ph("gilet", "rouge", ["back"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 10, maxZoom: 1.5,
     faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
   },
   {
@@ -201,7 +201,7 @@ export const products: ProductConfig[] = [
       { name: "Marine", hex: "#202533", photos: ph("bonnet", "marine", ["three-quarter"]) },
       { name: "Vert militaire", hex: "#444335", photos: ph("bonnet", "vert", ["three-quarter"]) },
     ],
-    sizes: ["Unique"], price: null, maxZoom: 1.25,
+    sizes: ["Unique"], price: null, priceFrom: 15, maxZoom: 1.25,
     faces: { "three-quarter": { x: 56.5, y: 44, w: 34.5, h: 25.5 } },
   },
 
@@ -218,7 +218,7 @@ export const products: ProductConfig[] = [
       { name: "Orange", hex: "#DF7237", photos: ph("tablier", "orange", ["front"]) },
       { name: "Rouge", hex: "#C42030", photos: ph("tablier", "rouge", ["front"]) },
     ],
-    sizes: ["Taille unique"], price: null, maxZoom: 1.5,
+    sizes: ["Taille unique"], price: null, priceFrom: 15, maxZoom: 1.5,
     // Zone sur la bavette (au-dessus de la poche).
     faces: { front: { x: 39.5, y: 25, w: 21, h: 22 } },
   },
@@ -232,14 +232,14 @@ export const products: ProductConfig[] = [
       { name: "Bleu clair", hex: "#3F78C8", photos: ph("gilet-securite", "bleu-clair", ["front"]) },
       { name: "Vert", hex: "#6ED05F", photos: ph("gilet-securite", "vert", ["front"]) },
     ],
-    sizes: ["XL", "XXL", "3XL"], price: null, maxZoom: 1.5,
+    sizes: ["XL", "XXL", "3XL"], price: null, priceFrom: 10, maxZoom: 1.5,
     // Dos : panneau central entre les bandes. Face : poitrine gauche, entre bande et ouverture (zone étroite).
     faces: { front: { x: 33.5, y: 24, w: 11, h: 18 }, back: { x: 32, y: 23, w: 36, h: 30 } },
   },
   {
     id: "pantalon", family: "Pantalon", name: "Pantalon",
     colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, maxZoom: 1.5,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 20, maxZoom: 1.5,
     faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
 
   },
@@ -253,21 +253,14 @@ export const productsHidden: ProductConfig[] = [
   {
     id: "tote-bag", family: "Tote bag", name: "Tote bag",
     colors: [{ name: "Écru", hex: "#E6DCC8", photos: pv("tote-bag", ["front", "back", "side", "three-quarter"]) }],
-    sizes: ["Unique"], price: null, maxZoom: 1.5,
+    sizes: ["Unique"], price: null, priceFrom: 10, maxZoom: 1.5,
     faces: { front: { x: 31, y: 52, w: 38, h: 30 }, back: { x: 31, y: 52, w: 38, h: 30 }, side: null, "three-quarter": null },
-
-  },
-  {
-    id: "mug", family: "Mug", name: "Mug",
-    colors: [{ name: "Blanc", hex: "#FFFFFF", photos: pv("mug", ["front", "back", "side", "three-quarter"]) }],
-    sizes: ["Unique"], price: null, maxZoom: 1.5,
-    faces: { front: { x: 20, y: 32, w: 36, h: 34 }, back: { x: 31, y: 31, w: 38, h: 36 }, side: null, "three-quarter": null },
 
   },
   {
     id: "sac-a-dos", family: "Sac à dos", name: "Sac à dos",
     colors: [{ name: "Noir", hex: "#111111", photos: ph("sac-a-dos", "base", ["front", "side", "back"]) }],
-    sizes: ["Unique"], price: null, maxZoom: 1.25,
+    sizes: ["Unique"], price: null, priceFrom: 20, maxZoom: 1.25,
     faces: { front: { x: 30, y: 33, w: 40, h: 18 }, side: { x: 38, y: 34, w: 22, h: 22 }, back: { x: 40, y: 34, w: 20, h: 24 } },
   },
 ];
