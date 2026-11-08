@@ -1,0 +1,140 @@
+"use server";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { createClient } from "@supabase/supabase-js";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { clearSession, requireAdmin, setSession } from "@/lib/admin/session";
+import { rateLimit } from "@/lib/rate-limit";
+import { syncOrderByReference } from "@/lib/payments/sync";
+import { deliver } from "@/lib/email/log";
+import { orderPaidMails, pickupMail, type OrderForMail } from "@/lib/email/messages";
+import { ORDER_STATUSES } from "@/lib/admin/statuses";
+import { products as catalog } from "@/config/products";
+
+
+export async function login(_: { error?: string } | undefined, fd: FormData): Promise<{ error?: string }> {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (!rateLimit(`admin-login:${ip}`, 8)) return { error: "Trop de tentatives. Réessayez dans quelques minutes." };
+  const email = String(fd.get("email") ?? "").trim().toLowerCase();
+  const password = String(fd.get("password") ?? "");
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const db = supabaseAdmin();
+  if (!url || !key || !db) return { error: "Service non configuré." };
+  const bad = { error: "Identifiants incorrects ou accès non autorisé." };
+  if (!email || !password) return bad;
+  const { data: allowed } = await db.from("atelier_admin_emails").select("email").eq("email", email).maybeSingle();
+  if (!allowed) return bad;
+  // Vérification du mot de passe par Supabase Auth ; la session Supabase obtenue est aussitôt abandonnée.
+  const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const { error } = await auth.auth.signInWithPassword({ email, password });
+  if (error) return bad;
+  await setSession(email);
+  redirect("/admin");
+}
+
+export async function logout() { await clearSession(); redirect("/admin/connexion"); }
+
+const num = (v: FormDataEntryValue | null) => Number(String(v ?? "").replace(",", ".").trim());
+
+export async function saveProduct(fd: FormData) {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const id = String(fd.get("id") ?? "");
+  const raw = String(fd.get("price") ?? "").trim();
+  const euros = raw === "" ? null : num(fd.get("price"));
+  if (euros !== null && (!Number.isFinite(euros) || euros < 0 || euros > 100000)) redirect("/admin/produits?msg=prix-invalide");
+  const price_cents = euros === null || euros === 0 ? null : Math.round(euros * 100);
+  const active = fd.get("active") === "on";
+  const purchasable = fd.get("purchasable") === "on" && active && price_cents !== null; // pas d'achat sans prix
+  const { error } = await db.from("atelier_products").update({ price_cents, active, purchasable }).eq("id", id);
+  revalidatePath("/admin/produits");
+  redirect(`/admin/produits?msg=${error ? "erreur" : "ok"}`);
+}
+
+export async function syncCatalog() {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const { data } = await db.from("atelier_products").select("id");
+  const have = new Set((data ?? []).map((r) => r.id as string));
+  const missing = catalog.filter((p) => !have.has(p.id)).map((p) => ({ id: p.id, name: p.name, category: "textile", purchasable: false, active: true }));
+  if (missing.length) await db.from("atelier_products").insert(missing);
+  const known = new Set(catalog.map((p) => p.id));
+  const stale = [...have].filter((id) => !known.has(id));
+  if (stale.length) await db.from("atelier_products").update({ active: false, purchasable: false }).in("id", stale);
+  revalidatePath("/admin/produits");
+  redirect(`/admin/produits?msg=sync-${missing.length}-${stale.length}`);
+}
+
+async function loadOrder(db: NonNullable<ReturnType<typeof supabaseAdmin>>, ref: string) {
+  const { data } = await db.from("atelier_orders").select("id, reference, total_cents, customer, items, payment_status, status").eq("reference", ref).maybeSingle();
+  return data as (OrderForMail & { id: string; payment_status: string; status: string }) | null;
+}
+
+export async function setOrderStatus(fd: FormData) {
+  const admin = await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const ref = String(fd.get("ref") ?? ""); const status = String(fd.get("status") ?? ""); const note = String(fd.get("note") ?? "").trim().slice(0, 500);
+  if (!(ORDER_STATUSES as readonly string[]).includes(status)) redirect(`/admin/commandes/${ref}?msg=statut-invalide`);
+  const o = await loadOrder(db, ref); if (!o) redirect("/admin/commandes");
+  if (o.payment_status !== "paid") redirect(`/admin/commandes/${ref}?msg=non-payee`); // on ne gère le suivi que des commandes payées
+  await db.from("atelier_orders").update({ status }).eq("id", o.id);
+  await db.from("atelier_order_events").insert({ order_id: o.id, status, note: note || null, actor: admin });
+  let mailMsg = "";
+  if (status === "prête pour le retrait" && fd.get("notify") === "on") {
+    const r = await deliver(db, o.id, pickupMail(o));
+    mailMsg = r.ok ? "&mail=ok" : "&mail=echec";
+  }
+  revalidatePath(`/admin/commandes/${ref}`);
+  redirect(`/admin/commandes/${ref}?msg=statut-ok${mailMsg}`);
+}
+
+export async function resendEmail(fd: FormData) {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const ref = String(fd.get("ref") ?? ""); const kind = String(fd.get("kind") ?? "");
+  const o = await loadOrder(db, ref); if (!o) redirect("/admin/commandes");
+  if (o.payment_status !== "paid") redirect(`/admin/commandes/${ref}?msg=non-payee`);
+  const mail = kind === "retrait_pret" ? pickupMail(o) : orderPaidMails(o).find((m) => m.kind === kind);
+  if (!mail) redirect(`/admin/commandes/${ref}?msg=type-invalide`);
+  const r = await deliver(db, o.id, mail);
+  revalidatePath("/admin/emails");
+  redirect(`/admin/commandes/${ref}?msg=mail-${r.ok ? "ok" : "echec"}`);
+}
+
+export async function resyncPayment(fd: FormData) {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const ref = String(fd.get("ref") ?? "");
+  try { await syncOrderByReference(db, ref); } catch { redirect(`/admin/commandes/${ref}?msg=sync-echec`); }
+  revalidatePath(`/admin/commandes/${ref}`);
+  redirect(`/admin/commandes/${ref}?msg=sync-ok`);
+}
+
+/** Renvoie tous les e-mails en échec (dernier essai de chaque commande/type), un seul essai par e-mail. */
+export async function retryFailedEmails() {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const { data: logs } = await db.from("atelier_email_log").select("order_id, kind, status, created_at").not("order_id", "is", null).order("created_at", { ascending: false }).limit(500);
+  const last = new Map<string, string>();
+  for (const l of logs ?? []) { const k = `${l.order_id}|${l.kind}`; if (!last.has(k)) last.set(k, l.status as string); }
+  let ok = 0, ko = 0;
+  for (const [k, st] of last) {
+    if (st === "sent") continue;
+    const [orderId, kind] = k.split("|");
+    const { data: ord } = await db.from("atelier_orders").select("reference").eq("id", orderId).maybeSingle();
+    if (!ord) continue;
+    const o = await loadOrder(db, ord.reference as string); if (!o || o.payment_status !== "paid") continue;
+    const mail = kind === "retrait_pret" ? pickupMail(o) : orderPaidMails(o).find((m) => m.kind === kind);
+    if (!mail) continue;
+    (await deliver(db, o.id, mail)).ok ? ok++ : ko++;
+  }
+  revalidatePath("/admin/emails");
+  redirect(`/admin/emails?msg=retry-${ok}-${ko}`);
+}
+
+/** Passe en « annulée » les commandes jamais payées après 24 h (checkout SumUp abandonné). */
+export async function closeStalePending() {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const limit = new Date(Date.now() - 24 * 3600_000).toISOString();
+  // Avant de clore, on relit chez SumUp : un client qui a payé en retard ne doit pas être annulé.
+  const { data: stale } = await db.from("atelier_orders").select("reference").eq("payment_status", "pending").lt("created_at", limit);
+  for (const o of stale ?? []) { try { await syncOrderByReference(db, o.reference as string); } catch { /* SumUp injoignable : on laisse en attente */ } }
+  const { data } = await db.from("atelier_orders").update({ status: "annulée", payment_status: "expired" }).eq("payment_status", "pending").lt("created_at", limit).select("id");
+  revalidatePath("/admin");
+  redirect(`/admin?msg=stale-${data?.length ?? 0}`);
+}

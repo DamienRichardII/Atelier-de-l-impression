@@ -18,8 +18,11 @@ export async function syncOrderByReference(db: SupabaseClient, reference: string
     // Mise à jour conditionnelle : si le webhook et la page de confirmation passent en même temps, un seul gagne (et envoie l'e-mail).
     const { data: changed } = await db.from("atelier_orders").update({
       payment_status: d.status, ...(d.status === "paid" ? { paid_at: new Date().toISOString(), status: "confirmée" } : {}),
-    }).eq("id", order.id).neq("payment_status", "paid").select("reference, total_cents, customer, items");
-    if (d.status === "paid" && changed?.[0]) await emailOrderPaid(changed[0] as never).catch(() => {});
+    }).eq("id", order.id).neq("payment_status", "paid").select("id, reference, total_cents, customer, items");
+    if (d.status === "paid" && changed?.[0]) {
+      await db.from("atelier_order_events").insert({ order_id: order.id, status: "confirmée", note: "Paiement SumUp confirmé", actor: "système" }).then(() => {}, () => {});
+      await emailOrderPaid(changed[0] as never, db, changed[0].id as string).catch(() => {});
+    }
     return { ...order, payment_status: d.status };
   }
   if (d.action === "alert") console.error(JSON.stringify({ scope: "payment_mismatch", reference, reason: d.reason }));

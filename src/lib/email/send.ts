@@ -6,9 +6,12 @@ const FROM_DEFAULT = "L'Atelier de l'Impression <onboarding@resend.dev>";
 
 export const esc = (s: unknown) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
-export async function sendEmail(p: { to: string | string[]; subject: string; html: string; replyTo?: string }) {
+export interface SendResult { ok: boolean; id?: string; error?: string; skipped?: boolean }
+
+/** Envoi avec résultat détaillé (utilisé par le journal d'e-mails). Ne lève jamais d'erreur. */
+export async function sendEmailDetailed(p: { to: string | string[]; subject: string; html: string; replyTo?: string }): Promise<SendResult> {
   const key = process.env.RESEND_API_KEY;
-  if (!key) { console.warn(JSON.stringify({ scope: "email", skipped: "RESEND_API_KEY manquante" })); return false; }
+  if (!key) { console.warn(JSON.stringify({ scope: "email", skipped: "RESEND_API_KEY manquante" })); return { ok: false, skipped: true, error: "RESEND_API_KEY manquante" }; }
   const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), 10_000);
   try {
     const res = await fetch("https://api.resend.com/emails", {
@@ -16,10 +19,16 @@ export async function sendEmail(p: { to: string | string[]; subject: string; htm
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from: process.env.RESEND_FROM || FROM_DEFAULT, to: p.to, subject: p.subject, html: p.html, ...(p.replyTo ? { reply_to: p.replyTo } : {}) }),
     });
-    if (!res.ok) { console.error(JSON.stringify({ scope: "email", status: res.status, body: (await res.text()).slice(0, 300) })); return false; }
-    return true;
-  } catch (e) { console.error(JSON.stringify({ scope: "email", error: (e as Error).message })); return false; }
+    const text = await res.text();
+    if (!res.ok) { console.error(JSON.stringify({ scope: "email", status: res.status, body: text.slice(0, 300) })); return { ok: false, error: `HTTP ${res.status} ${text.slice(0, 200)}` }; }
+    let id: string | undefined; try { id = (JSON.parse(text) as { id?: string }).id; } catch { /* corps non JSON */ }
+    return { ok: true, id };
+  } catch (e) { console.error(JSON.stringify({ scope: "email", error: (e as Error).message })); return { ok: false, error: (e as Error).message }; }
   finally { clearTimeout(t); }
+}
+
+export async function sendEmail(p: { to: string | string[]; subject: string; html: string; replyTo?: string }) {
+  return (await sendEmailDetailed(p)).ok;
 }
 
 export const notifyAddress = () => process.env.QUOTE_NOTIFY_EMAIL || "Atelierprint2.0@gmail.com";
