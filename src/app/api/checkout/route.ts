@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   if (input.website) return NextResponse.json({ error: "Requête refusée." }, { status: 400 }); // bot
 
   const db = supabaseAdmin();
-  if (!db || !sumupConfigured() || !siteUrl()) return NextResponse.json({ error: "Le paiement en ligne n'est pas encore disponible. Demandez un devis." }, { status: 503 });
+  if (!db || !sumupConfigured() || !siteUrl()) return NextResponse.json({ error: "Le paiement en ligne n'est pas encore disponible. Contactez l'atelier." }, { status: 503 });
 
   // Idempotence : un double clic ou un rechargement ne crée pas une 2e commande.
   const { data: existing } = await db.from("atelier_orders").select("id, reference, payment_status").eq("idempotency_key", input.idempotencyKey).maybeSingle();
@@ -61,6 +61,6 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error(JSON.stringify({ scope: "checkout_create", reference, message: (e as Error).message }));
     await db.from("atelier_orders").update({ payment_status: "failed", status: "annulée" }).eq("id", order.id);
-    return NextResponse.json({ error: "Le service de paiement ne répond pas. Aucun débit n'a été effectué. Réessayez ou demandez un devis." }, { status: 502 });
+    return NextResponse.json({ error: "Le service de paiement ne répond pas. Aucun débit n'a été effectué. Réessayez ou contactez l'atelier." }, { status: 502 });
   }
 }

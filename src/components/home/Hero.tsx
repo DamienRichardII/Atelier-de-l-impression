@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { Shirt, FileText } from "lucide-react";
+import { Shirt } from "lucide-react";
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -25,11 +25,6 @@ export function Hero() {
         <motion.div {...fade(0.5)}>
           <Link href="/personnalisation" className="btn btn-dark w-full sm:w-auto">
             <Shirt size={18} /> Personnaliser un produit
-          </Link>
-        </motion.div>
-        <motion.div {...fade(0.65)}>
-          <Link href="/personnalisation#devis" className="btn btn-light w-full sm:w-auto">
-            <FileText size={18} /> Demander un devis
           </Link>
         </motion.div>
       </div>

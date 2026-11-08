@@ -7,13 +7,13 @@ import { products, formatPriceFrom } from "@/config/products";
 const steps = [
   ["01", "Choisissez", "Sélectionnez votre support et sa couleur."],
   ["02", "Personnalisez", "Importez votre logo et placez-le sur le produit."],
-  ["03", "Devis ou commande", "Envoyez votre demande ou commandez si le tarif est validé."],
+  ["03", "Commandez", "Payez en ligne en toute sécurité, puis retirez votre commande à l'atelier."],
 ];
 
 const faq = [
   ["Le rendu du simulateur est-il définitif ?", "Non. C'est une simulation indicative, pas un bon à tirer. Le visuel est validé avec vous avant production."],
   ["Quels formats de logo acceptez-vous ?", "PNG, JPG, WEBP et SVG (nettoyé automatiquement)."],
-  ["Comment obtenir un prix ?", "Via le devis intégré au simulateur. Un lien de paiement SumUp vous est envoyé après acceptation."],
+  ["Comment commander ?", "Directement dans le simulateur : le prix s'affiche pour chaque produit, vous ajoutez au panier et payez en ligne. Retrait à l'atelier."],
 ];
 
 export const metadata = { alternates: { canonical: "/" } };
@@ -41,7 +41,7 @@ export default function Home() {
                 );
               })()}
               <p className="mt-4 font-medium">{p.name}</p>
-              <p className="text-sm text-muted">{p.priceFrom ? formatPriceFrom(p.priceFrom) : "Sur devis"}</p>
+              <p className="text-sm text-muted">{p.priceFrom ? formatPriceFrom(p.priceFrom) : "Nous contacter"}</p>
               <p className="text-sm">Personnaliser →</p>
             </Link>
           ))}

@@ -76,7 +76,7 @@ export function AddToCart({ product, color, logos, originals, snapshot }: Props)
         </button>
         {state === "added" && <Link href="/panier" className="btn btn-light"><Check size={16} /> Ajouté — voir le panier</Link>}
       </div>
-      <p className="mt-3 text-xs text-muted">Pour une grande quantité ou un besoin particulier, utilisez plutôt la demande de devis ci-dessous.</p>
+      <p className="mt-3 text-xs text-muted">Pour une grande quantité ou un besoin particulier, <Link href="/contact" className="underline">contactez l'atelier</Link>.</p>
     </section>
   );
 }

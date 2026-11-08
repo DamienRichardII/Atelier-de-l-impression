@@ -37,8 +37,8 @@ export function Header() {
           <Link href="/panier" aria-label="Panier" className="grid h-11 w-11 place-items-center rounded-xl border border-line">
             <ShoppingBag size={18} />
           </Link>
-          <Link href="/personnalisation#devis" className="btn btn-dark hidden whitespace-nowrap md:inline-flex !min-h-11">
-            Demander un devis
+          <Link href="/personnalisation" className="btn btn-dark hidden whitespace-nowrap md:inline-flex !min-h-11">
+            Personnaliser
           </Link>
           <button className="grid h-11 w-11 place-items-center rounded-xl border border-line lg:hidden"
             aria-label={open ? "Fermer le menu" : "Ouvrir le menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -52,8 +52,8 @@ export function Header() {
             <Link key={n.href} href={n.href} onClick={() => setOpen(false)}
               className="block border-b border-line py-3 text-base">{n.label}</Link>
           ))}
-          <Link href="/personnalisation#devis" onClick={() => setOpen(false)} className="btn btn-dark mt-4 w-full">
-            Demander un devis
+          <Link href="/personnalisation" onClick={() => setOpen(false)} className="btn btn-dark mt-4 w-full">
+            Personnaliser
           </Link>
         </nav>
       )}

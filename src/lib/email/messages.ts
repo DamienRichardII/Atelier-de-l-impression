@@ -5,29 +5,6 @@ import { deliver, type Mail } from "./log";
 const row = (k: string, v: string) => `<tr><td style="padding:4px 12px 4px 0;color:#737373;font-size:13px;vertical-align:top">${esc(k)}</td><td style="padding:4px 0;font-size:14px">${v}</td></tr>`;
 const table = (rows: string) => `<table role="presentation" cellpadding="0" cellspacing="0">${rows}</table>`;
 
-export async function emailQuote(q: {
-  reference: string; firstName: string; lastName: string; email: string; phone: string; company?: string;
-  delivery: string; address?: string; comments?: string; product: string; color: string; sizes: Record<string, number>; filesCount: number;
-}) {
-  const sizes = Object.entries(q.sizes).filter(([, n]) => n > 0).map(([s, n]) => `${s} × ${n}`).join(", ") || "non précisé";
-  const detail = table(
-    row("Référence", `<strong>${esc(q.reference)}</strong>`) + row("Produit", `${esc(q.product)} — ${esc(q.color)}`) + row("Tailles", esc(sizes)),
-  );
-  await Promise.all([
-    sendEmail({
-      to: notifyAddress(), replyTo: q.email, subject: `Nouvelle demande de devis ${q.reference}`,
-      html: tpl.shell(`Nouvelle demande de devis`, detail + `<p style="margin:16px 0 4px;font-size:13px;color:#737373">Client</p>` + table(
-        row("Nom", esc(`${q.firstName} ${q.lastName}`)) + (q.company ? row("Entreprise", esc(q.company)) : "") +
-        row("E-mail", esc(q.email)) + row("Téléphone", esc(q.phone)) + row("Remise", esc(q.delivery === "livraison" ? `Livraison — ${q.address ?? ""}` : "Retrait à l'atelier")) +
-        (q.comments ? row("Commentaires", esc(q.comments)) : "") + row("Fichiers", `${q.filesCount} (logo, aperçu : dans l'espace de stockage privé, dossier ${esc(q.reference)})`))),
-    }),
-    sendEmail({
-      to: q.email, subject: `Votre demande de devis ${q.reference}`,
-      html: tpl.shell("Demande bien reçue", `<p style="font-size:14px;line-height:1.6">Bonjour ${esc(q.firstName)}, nous avons bien reçu votre demande. L'atelier vous répondra avec un devis.</p>${detail}<p style="font-size:13px;color:#737373;margin-top:20px">Conservez votre référence. L'aperçu du simulateur est indicatif et ne constitue pas un bon à tirer.</p>`),
-    }),
-  ]);
-}
-
 interface Line { name: string; color: string; sizes: Record<string, number>; qty: number; unit_cents: number; line_cents: number }
 export interface OrderForMail { reference: string; total_cents: number; customer: { firstName: string; lastName: string; email: string; phone: string }; items: Line[] }
 

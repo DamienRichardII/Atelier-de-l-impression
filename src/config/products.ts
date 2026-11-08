@@ -1,5 +1,5 @@
 // Données de démonstration — à remplacer par la table `products` (Supabase) via l'admin.
-// Aucun prix inventé : price = null → devis obligatoire.
+// Prix affichés (priceFrom) validés par le client ; le prix payé est celui de la base (atelier_products).
 export type Face = "front" | "back" | "left" | "right" | "side" | "three-quarter";
 
 export interface PrintZone { x: number; y: number; w: number; h: number } // en % du canevas
@@ -25,7 +25,7 @@ export interface ProductConfig {
   /** Zoom max cohérent avec la résolution réelle des photos (au-delà : pixellisation). */
   maxZoom?: number;
   price: number | null;
-  /** Prix « à partir de » (€ TTC indicatif) communiqué par le client. Le prix final est confirmé par devis. */
+  /** Prix « à partir de » (€ TTC indicatif) communiqué par le client. Le prix payé est celui de la base de données. */
   priceFrom?: number;
 }
 

@@ -11,8 +11,7 @@ export function PageHero({ title, text }: { title: string; text: string }) {
         <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">{title}</h1>
         <p className="mt-5 max-w-xl text-base text-white/70 sm:text-lg">{text}</p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link href="/personnalisation#devis" className="btn bg-white !text-black hover:!bg-white/90">Demander un devis</Link>
-          <Link href="/personnalisation" className="btn border-white/60 bg-transparent text-white hover:bg-white hover:text-black"><Wand2 size={16} /> Utiliser le simulateur</Link>
+          <Link href="/personnalisation" className="btn bg-white !text-black hover:!bg-white/90"><Wand2 size={16} /> Utiliser le simulateur</Link>
         </div>
       </div>
     </section>
@@ -28,7 +27,7 @@ export function CtaBand({ title, text }: { title: string; text: string }) {
         <div className="relative">
           <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
           <p className="mt-3 max-w-lg text-white/70">{text}</p>
-          <Link href="/personnalisation#devis" className="btn mt-6 bg-white !text-black hover:!bg-white/90">Demander un devis</Link>
+          <Link href="/personnalisation" className="btn mt-6 bg-white !text-black hover:!bg-white/90">Personnaliser un produit</Link>
         </div>
       </div>
     </section>

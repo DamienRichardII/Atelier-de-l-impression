@@ -67,7 +67,7 @@ export function Cart() {
         <p className="mt-1 text-xs text-muted">Retrait à l'atelier, Aulnay-sous-Bois.</p>
         {ready && (!enabled || !payable) ? (
           <div className="mt-5 rounded-2xl border border-line p-4 text-sm">
-            Le paiement en ligne n'est pas disponible pour ces articles. <Link href="/personnalisation#devis" className="underline">Demandez un devis</Link>.
+            Le paiement en ligne n'est pas disponible pour ces articles. <Link href="/contact" className="underline">Contactez l'atelier</Link>.
           </div>
         ) : (
           <>

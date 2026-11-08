@@ -15,7 +15,7 @@ export default function Page() {
       <p className="eyebrow">Contact</p>
       <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">Parlons de votre projet</h1>
       <p className="mt-4 max-w-2xl text-muted">
-        Une question sur un produit, une personnalisation ou un devis ? Écrivez-nous ou passez à l'atelier.
+        Une question sur un produit, ou une personnalisation ? Écrivez-nous ou passez à l'atelier.
       </p>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
@@ -50,8 +50,7 @@ export default function Page() {
       </div>
 
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        <Link href="/personnalisation#devis" className="btn btn-dark">Demander un devis</Link>
-        <Link href="/personnalisation" className="btn btn-light">Personnaliser un produit</Link>
+        <Link href="/personnalisation" className="btn btn-dark">Personnaliser un produit</Link>
       </div>
     </section>
   );

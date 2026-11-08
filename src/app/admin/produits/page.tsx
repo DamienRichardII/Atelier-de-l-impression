@@ -14,7 +14,7 @@ async function Products({ searchParams }: { searchParams: Promise<{ msg?: string
   return (
     <>
       <Notice msg={msg} />
-      <p className="mb-4 max-w-2xl text-sm text-muted">Un produit n'est achetable en ligne que s'il est actif, a un prix et que « Achat en ligne » est coché. Sinon le client demande un devis. Prix TTC par pièce, en euros.</p>
+      <p className="mb-4 max-w-2xl text-sm text-muted">Un produit n'est achetable en ligne que s'il est actif, a un prix et que « Achat en ligne » est coché. Sinon le produit ne peut pas être commandé en ligne. Prix TTC par pièce, en euros.</p>
       <div className="card overflow-x-auto">
         <table className="w-full min-w-[640px]"><thead><tr><th className={th}>Produit</th><th className={th}>Prix (€)</th><th className={th}>Actif</th><th className={th}>Achat en ligne</th><th className={th}></th></tr></thead>
           <tbody>{(data ?? []).map((p) => { const f = `f-${p.id}`; return (

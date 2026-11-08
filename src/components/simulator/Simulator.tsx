@@ -7,7 +7,6 @@ import { products, formatPriceFrom, type Face } from "@/config/products";
 import type { LogoPlacement } from "@/lib/customization/types";
 import { loadLogoFile, removeWhiteBackground } from "@/lib/customization/svg";
 import type { PreviewHandle } from "./PreviewStage";
-import { QuoteForm } from "./QuoteForm";
 import { AddToCart } from "./AddToCart";
 import { eur, usePrices } from "@/lib/cart/usePrices";
 
@@ -145,7 +144,7 @@ export function Simulator() {
             )}
             {product.description && <p className="mt-3 text-sm">{product.description}</p>}
             <p className="mt-3 text-sm text-muted">
-              {payOn && prices[product.id] ? `${eur(prices[product.id])} la pièce · achat en ligne, sans devis.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} · tarif indicatif, confirmé par devis.` : "Tarif sur devis."}
+              {payOn && prices[product.id] ? `${eur(prices[product.id])} la pièce · achat en ligne.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} la pièce.` : "Tarif : contactez l'atelier."}
             </p>
           </Section>
           <Section n="02" title={`Couleur — ${color.name}`}>
@@ -207,14 +206,6 @@ export function Simulator() {
       </div>
 
       <AddToCart product={product} color={color} logos={logos} originals={originals} snapshot={snapshot} />
-      {payOn && prices[product.id] ? (
-        <details className="mt-8 rounded-3xl border border-line p-5 sm:p-6">
-          <summary className="cursor-pointer text-sm font-medium">Besoin d'une grande quantité ou d'un devis ? Cliquez ici</summary>
-          <QuoteForm product={product} color={color} logos={logos} originals={originals} snapshot={snapshot} preview={preview} />
-        </details>
-      ) : (
-        <QuoteForm product={product} color={color} logos={logos} originals={originals} snapshot={snapshot} preview={preview} />
-      )}
     </div>
   );
 }

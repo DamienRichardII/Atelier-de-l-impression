@@ -14,7 +14,7 @@ const promises = [
   { icon: BadgeCheck, title: "Qualité professionnelle", text: "Un rendu soigné, en atelier" },
   { icon: Headset, title: "Accompagnement personnalisé", text: "De la création au retrait" },
   { icon: Store, title: "Retrait à l'atelier", text: "Aulnay-sous-Bois" },
-  { icon: FileText, title: "Devis sur demande", text: "Adapté à votre projet" },
+  { icon: FileText, title: "Commande en ligne", text: "Paiement sécurisé" },
 ];
 
 export default function Page() {
