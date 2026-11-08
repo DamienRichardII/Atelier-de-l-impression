@@ -1,3 +1,4 @@
+import { sidesOf } from "@/lib/cart/sides";
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { checkoutSchema } from "@/lib/validation/checkout";
@@ -33,9 +34,10 @@ export async function POST(req: Request) {
 
   // Prix : lus en base, jamais fournis par le navigateur.
   const ids = [...new Set(input.items.map((i) => i.productId))];
-  const { data: rows, error: pErr } = await db.from("atelier_products").select("id, price_cents").in("id", ids).eq("active", true).eq("purchasable", true).gt("price_cents", 0);
+  const { data: rows, error: pErr } = await db.from("atelier_products").select("id, price_cents, price_both_cents").in("id", ids).eq("active", true).eq("purchasable", true).gt("price_cents", 0);
   if (pErr) return NextResponse.json({ error: "Service momentanément indisponible." }, { status: 500 });
-  const priced = priceCart(input.items, rows ?? []);
+  const withSides = await Promise.all(input.items.map(async (i) => ({ ...i, sides: await sidesOf(db, i.assetsId) })));
+  const priced = priceCart(withSides, rows ?? []);
   if (!priced.ok) return NextResponse.json({ error: priced.error }, { status: 400 });
 
   const reference = `CMD-${new Date().getFullYear()}-${randomUUID().slice(0, 6).toUpperCase()}`;

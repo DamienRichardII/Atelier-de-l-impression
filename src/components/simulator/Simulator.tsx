@@ -33,7 +33,7 @@ function Section({ n, title, children }: { n: string; title: string; children: R
 }
 
 export function Simulator() {
-  const { enabled: payOn, prices } = usePrices();
+  const { enabled: payOn, prices, pricesBoth } = usePrices();
   const params = useSearchParams();
   const initial = products.find((p) => p.id === params.get("produit")) ?? products[0];
   const [productId, setProductId] = useState(initial.id);
@@ -144,7 +144,7 @@ export function Simulator() {
             )}
             {product.description && <p className="mt-3 text-sm">{product.description}</p>}
             <p className="mt-3 text-sm text-muted">
-              {payOn && prices[product.id] ? `${eur(prices[product.id])} la pièce · achat en ligne.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} la pièce.` : "Tarif : contactez l'atelier."}
+              {payOn && prices[product.id] ? pricesBoth[product.id] && pricesBoth[product.id] !== prices[product.id] ? `${eur(prices[product.id])} la pièce en impression recto · ${eur(pricesBoth[product.id])} en recto-verso.` : `${eur(prices[product.id])} la pièce · achat en ligne.` : product.priceFrom ? `${formatPriceFrom(product.priceFrom)} la pièce.` : "Tarif : contactez l'atelier."}
             </p>
           </Section>
           <Section n="02" title={`Couleur — ${color.name}`}>
@@ -168,7 +168,7 @@ export function Simulator() {
                 <Upload className="mx-auto" size={22} />
                 <p className="mt-3 text-sm">Glissez votre logo ici ou</p>
                 <button className="btn btn-dark mt-3" onClick={() => input.current?.click()}>Choisir un fichier</button>
-                <p className="mt-3 text-xs text-muted">PNG · JPG · WEBP · SVG — 5 Mo max. Le fichier reste sur votre appareil jusqu'à l'envoi du devis.</p>
+                <p className="mt-3 text-xs text-muted">PNG · JPG · WEBP · SVG — 5 Mo max. Le fichier reste sur votre appareil jusqu'à l'ajout au panier.</p>
               </div>
             ) : (
               <div className="flex items-center justify-between gap-2 rounded-2xl border border-line p-3">

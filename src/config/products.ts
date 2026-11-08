@@ -53,7 +53,7 @@ export const products: ProductConfig[] = [
       { name: "Prune", hex: "#875262", photos: ph("t-shirt", "prune", ["front"]) },
       { name: "Rose pâle", hex: "#F4DBDE", photos: ph("t-shirt", "rose-pale", ["front"]) },
     ],
-    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
   },
   {
@@ -63,7 +63,7 @@ export const products: ProductConfig[] = [
       { name: "Blanc", hex: "#EAEAEA", photos: ph("t-shirt-oversize", "blanc", ["front"]) },
       { name: "Noir", hex: "#2A2526", photos: ph("t-shirt-oversize", "noir", ["front"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
     faces: { front: { x: 34, y: 25, w: 32, h: 28 } },
   },
   {
@@ -80,7 +80,7 @@ export const products: ProductConfig[] = [
       { name: "Kaki délavé", hex: "#6F674A", photos: ph("t-shirt-chicago", "kaki", ["front"]) },
       { name: "Anthracite délavé", hex: "#4B4A4E", photos: ph("t-shirt-chicago", "anthracite", ["front"]) },
     ],
-    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 19,
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 15,
     faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {

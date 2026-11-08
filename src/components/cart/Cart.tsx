@@ -3,13 +3,14 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import { Loader2, Lock, Trash2 } from "lucide-react";
 import { cart, itemQty, useCart } from "@/lib/cart/store";
-import { eur, usePrices } from "@/lib/cart/usePrices";
+import { eur, unitPrice, usePrices } from "@/lib/cart/usePrices";
 
 const input = "mt-1 w-full min-h-12 rounded-xl border border-line bg-white px-4 text-base outline-none focus:border-black";
 
 export function Cart() {
   const items = useCart();
-  const { ready, enabled, prices } = usePrices();
+  const pr = usePrices();
+  const { ready, enabled, prices } = pr;
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const keyRef = useRef<string | null>(null); // une clé par tentative de commande : un double clic ne crée pas deux commandes
@@ -23,7 +24,8 @@ export function Cart() {
     );
   }
   const payable = items.every((i) => prices[i.productId] > 0);
-  const total = items.reduce((a, i) => a + (prices[i.productId] ?? 0) * itemQty(i), 0);
+  const unit = (i: (typeof items)[number]) => unitPrice(pr, i.productId, i.sides ?? 1);
+  const total = items.reduce((a, i) => a + unit(i) * itemQty(i), 0);
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,7 +56,7 @@ export function Cart() {
             <div className="min-w-0 flex-1">
               <p className="font-medium">{i.productName} — {i.color}</p>
               <p className="mt-1 text-sm text-muted">{Object.entries(i.sizes).map(([s, n]) => `${s} × ${n}`).join(" · ")}</p>
-              <p className="mt-1 text-sm">{itemQty(i)} pièce(s){prices[i.productId] ? <> · <strong>{eur(prices[i.productId] * itemQty(i))}</strong></> : null}</p>
+              <p className="mt-1 text-sm">{itemQty(i)} pièce(s) · {(i.sides ?? 1) === 2 ? "recto-verso" : "recto"}{prices[i.productId] ? <> · {eur(unit(i))} la pièce · <strong>{eur(unit(i) * itemQty(i))}</strong></> : null}</p>
               {i.hasLogo && <p className="mt-1 text-xs text-muted">Logo et aperçu joints</p>}
             </div>
             <button className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-line" aria-label="Retirer du panier" onClick={() => cart.remove(i.id)}><Trash2 size={16} /></button>

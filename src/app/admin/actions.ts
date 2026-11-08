@@ -97,9 +97,34 @@ export async function saveProduct(fd: FormData) {
   const euros = raw === "" ? null : num(fd.get("price"));
   if (euros !== null && (!Number.isFinite(euros) || euros < 0 || euros > 100000)) redirect("/admin/produits?msg=prix-invalide");
   const price_cents = euros === null || euros === 0 ? null : Math.round(euros * 100);
+  const rawBoth = String(fd.get("priceBoth") ?? "").trim();
+  const eurosBoth = rawBoth === "" ? null : num(fd.get("priceBoth"));
+  if (eurosBoth !== null && (!Number.isFinite(eurosBoth) || eurosBoth < 0 || eurosBoth > 100000)) redirect("/admin/produits?msg=prix-invalide");
+  const price_both_cents = eurosBoth === null || eurosBoth === 0 ? null : Math.round(eurosBoth * 100); // vide = même prix que le recto
   const active = fd.get("active") === "on";
   const purchasable = fd.get("purchasable") === "on" && active && price_cents !== null; // pas d'achat sans prix
-  const { error } = await db.from("atelier_products").update({ price_cents, active, purchasable }).eq("id", id);
+  const { error } = await db.from("atelier_products").update({ price_cents, price_both_cents, active, purchasable }).eq("id", id);
+  revalidatePath("/admin/produits");
+  redirect(`/admin/produits?msg=${error ? "erreur" : "ok"}`);
+}
+
+/** Applique un prix recto et/ou recto-verso à tous les produits d'une catégorie (champ vide = inchangé). */
+export async function saveCategory(fd: FormData) {
+  await requireAdmin(); const db = supabaseAdmin(); if (!db) return;
+  const family = String(fd.get("family") ?? "");
+  const ids = catalog.filter((p) => p.family === family).map((p) => p.id);
+  if (!ids.length) redirect("/admin/produits?msg=erreur");
+  const patch: Record<string, number> = {};
+  for (const [field, col] of [["price", "price_cents"], ["priceBoth", "price_both_cents"]] as const) {
+    const raw = String(fd.get(field) ?? "").trim();
+    if (raw === "") continue;
+    const v = num(fd.get(field));
+    if (!Number.isFinite(v) || v <= 0 || v > 100000) redirect("/admin/produits?msg=prix-invalide");
+    patch[col] = Math.round(v * 100);
+  }
+  if (!Object.keys(patch).length) redirect("/admin/produits?msg=prix-invalide");
+  const { error } = await db.from("atelier_products").update(patch).in("id", ids);
+  if (!error && patch.price_cents) await db.from("atelier_products").update({ purchasable: true }).in("id", ids).eq("active", true);
   revalidatePath("/admin/produits");
   redirect(`/admin/produits?msg=${error ? "erreur" : "ok"}`);
 }

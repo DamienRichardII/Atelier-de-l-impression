@@ -6,11 +6,11 @@ import { siteUrl } from "@/lib/admin/confirm";
 const row = (k: string, v: string) => `<tr><td style="padding:4px 12px 4px 0;color:#737373;font-size:13px;vertical-align:top">${esc(k)}</td><td style="padding:4px 0;font-size:14px">${v}</td></tr>`;
 const table = (rows: string) => `<table role="presentation" cellpadding="0" cellspacing="0">${rows}</table>`;
 
-interface Line { name: string; color: string; sizes: Record<string, number>; qty: number; unit_cents: number; line_cents: number }
+interface Line { name: string; color: string; sizes: Record<string, number>; qty: number; unit_cents: number; line_cents: number; sides?: number }
 export interface OrderForMail { reference: string; total_cents: number; customer: { firstName: string; lastName: string; email: string; phone: string }; items: Line[] }
 
 const orderBody = (o: OrderForMail) => {
-  const lines = o.items.map((l) => row(`${l.name} — ${l.color}`, `${esc(Object.entries(l.sizes).map(([s, n]) => `${s} × ${n}`).join(", "))} · ${l.qty} pièce(s) · ${eur(l.line_cents)}`)).join("");
+  const lines = o.items.map((l) => row(`${l.name} — ${l.color}${l.sides ? (l.sides === 2 ? " (recto-verso)" : " (recto)") : ""}`, `${esc(Object.entries(l.sizes).map(([s, n]) => `${s} × ${n}`).join(", "))} · ${l.qty} pièce(s) · ${eur(l.line_cents)}`)).join("");
   return table(row("Référence", `<strong>${esc(o.reference)}</strong>`) + lines + row("Total payé", `<strong>${eur(o.total_cents)}</strong>`));
 };
 

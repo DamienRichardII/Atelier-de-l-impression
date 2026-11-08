@@ -3,7 +3,7 @@ import { useSyncExternalStore } from "react";
 
 export interface CartItem {
   id: string; productId: string; productName: string; color: string;
-  sizes: Record<string, number>; assetsId: string | null; thumb: string | null; hasLogo: boolean;
+  sizes: Record<string, number>; assetsId: string | null; thumb: string | null; hasLogo: boolean; sides?: number;
 }
 const KEY = "atelier-cart-v1";
 let cache: CartItem[] | null = null;

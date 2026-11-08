@@ -19,8 +19,9 @@ export async function GET() {
 
   const db = supabaseAdmin();
   if (!db) return NextResponse.json({ prices: {}, enabled: false, reason: "supabase" }, { headers });
-  const { data, error } = await db.from("atelier_products").select("id, price_cents").eq("active", true).eq("purchasable", true).gt("price_cents", 0);
+  const { data, error } = await db.from("atelier_products").select("id, price_cents, price_both_cents").eq("active", true).eq("purchasable", true).gt("price_cents", 0);
   if (error) { console.error(JSON.stringify({ scope: "prices", message: error.message })); return NextResponse.json({ prices: {}, enabled: false, reason: "base_de_donnees" }, { headers }); }
   const prices = Object.fromEntries((data ?? []).map((r) => [r.id, r.price_cents]));
-  return NextResponse.json({ prices, enabled: true, reason: Object.keys(prices).length ? "ok" : "aucun_produit_active" }, { headers });
+  const pricesBoth = Object.fromEntries((data ?? []).filter((r) => (r.price_both_cents ?? 0) > 0).map((r) => [r.id, r.price_both_cents]));
+  return NextResponse.json({ prices, pricesBoth, enabled: true, reason: Object.keys(prices).length ? "ok" : "aucun_produit_active" }, { headers });
 }

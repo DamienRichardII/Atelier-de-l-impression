@@ -1,15 +1,15 @@
 import { products } from "@/config/products";
 
-export interface PriceRow { id: string; price_cents: number }
+export interface PriceRow { id: string; price_cents: number; price_both_cents?: number | null }
 export interface PricedLine {
   productId: string; name: string; color: string; sizes: Record<string, number>;
-  qty: number; unit_cents: number; line_cents: number; assetsId: string | null;
+  qty: number; unit_cents: number; line_cents: number; assetsId: string | null; sides: 1 | 2;
 }
 export type PriceResult = { ok: true; lines: PricedLine[]; total_cents: number } | { ok: false; error: string };
 
 /** Calcul serveur : prix lus en base (jamais envoyés par le navigateur), tailles/couleurs validées contre le catalogue. */
 export function priceCart(
-  items: { productId: string; color: string; sizes: Record<string, number>; assetsId: string | null }[],
+  items: { productId: string; color: string; sizes: Record<string, number>; assetsId: string | null; sides: 1 | 2 }[],
   prices: PriceRow[],
 ): PriceResult {
   const lines: PricedLine[] = [];
@@ -26,7 +26,8 @@ export function priceCart(
     }
     const qty = Object.values(sizes).reduce((a, b) => a + b, 0);
     if (qty < 1 || qty > 1000) return { ok: false, error: "Quantité invalide." };
-    lines.push({ productId: it.productId, name: cfg.name, color: it.color, sizes, qty, unit_cents: row.price_cents, line_cents: row.price_cents * qty, assetsId: it.assetsId });
+    const unit = it.sides === 2 && (row.price_both_cents ?? 0) > 0 ? (row.price_both_cents as number) : row.price_cents;
+    lines.push({ productId: it.productId, name: cfg.name, color: it.color, sizes, qty, unit_cents: unit, line_cents: unit * qty, assetsId: it.assetsId, sides: it.sides });
   }
   const total_cents = lines.reduce((a, l) => a + l.line_cents, 0);
   if (total_cents < 100 || total_cents > 5_000_000) return { ok: false, error: "Montant de commande invalide." };

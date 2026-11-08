@@ -7,7 +7,7 @@ import { itemFiles } from "@/lib/admin/files";
 import { ORDER_STATUSES } from "@/lib/admin/statuses";
 import { resendEmail, resyncPayment, setOrderStatus } from "@/app/admin/actions";
 
-type Line = { name: string; color: string; qty: number; line_cents: number; sizes: Record<string, number>; assetsId?: string | null };
+type Line = { name: string; color: string; qty: number; line_cents: number; sizes: Record<string, number>; assetsId?: string | null; sides?: number };
 
 async function Detail({ params, searchParams }: { params: Promise<{ ref: string }>; searchParams: Promise<{ msg?: string; mail?: string }> }) {
   await requireAdmin();
@@ -38,7 +38,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ ref: string 
           <p className="text-sm">{c.firstName} {c.lastName}<br /><a className="underline" href={`mailto:${c.email}`}>{c.email}</a><br /><a className="underline" href={`tel:${c.phone}`}>{c.phone}</a></p>
           <h3 className="mt-6 mb-3 flex items-center justify-between font-semibold">Articles {files.some((f) => f.length) && <a href={`/admin/logos/zip?ref=${encodeURIComponent(o.reference)}`} className="rounded-xl border border-line px-3 py-1.5 text-xs font-normal hover:border-black">Tout télécharger (.zip)</a>}</h3>
           <ul className="space-y-2 text-sm">
-            {items.map((l, i) => <li key={i}><strong>{l.name}</strong> — {l.color}<br /><span className="text-muted">{Object.entries(l.sizes ?? {}).map(([s, n]) => `${s} × ${n}`).join(", ")} · {l.qty} pièce(s) · {eur(l.line_cents)}</span>
+            {items.map((l, i) => <li key={i}><strong>{l.name}</strong> — {l.color} {l.sides ? ` (${l.sides === 2 ? "recto-verso" : "recto"})` : ""}<br /><span className="text-muted">{Object.entries(l.sizes ?? {}).map(([s, n]) => `${s} × ${n}`).join(", ")} · {l.qty} pièce(s) · {eur(l.line_cents)}</span>
               <span className="mt-2 flex flex-wrap gap-2">
                 {files[i].map((f) => <a key={f.url} href={f.url} download className="rounded-xl border border-line px-3 py-1.5 text-xs hover:border-black">Télécharger : {f.label}</a>)}
                 {!files[i].length && <span className="text-xs text-muted">Aucun fichier retrouvé pour cet article.</span>}
