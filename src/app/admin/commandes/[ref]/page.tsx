@@ -61,7 +61,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ ref: string 
                 <form key={k} action={resendEmail}><input type="hidden" name="ref" value={o.reference} /><input type="hidden" name="kind" value={k} /><button className={btn}>{KIND_LABEL[k]}</button></form>))}
             </div> : <p className="text-sm text-muted">Disponible après paiement.</p>}
             <ul className="mt-4 space-y-2 text-sm">
-              {(lg.data ?? []).map((l, i) => <li key={i}><Badge tone={mailTone(l.status)}>{mailLabel(l.status)}</Badge> {KIND_LABEL[l.kind] ?? l.kind} → {l.recipient}<br /><span className="text-xs text-muted">{dt(l.created_at)}{l.provider_id ? ` · Resend ${l.provider_id}` : ""}{l.error ? ` · ${l.error}` : ""}</span></li>)}
+              {(lg.data ?? []).map((l, i) => <li key={i}><Badge tone={mailTone(l.status)}>{mailLabel(l.status)}</Badge> {KIND_LABEL[l.kind] ?? l.kind} → {l.recipient}<br /><span className="text-xs text-muted">{dt(l.created_at)}{l.provider_id ? ` · réf. ${l.provider_id}` : ""}{l.error ? ` · ${l.error}` : ""}</span></li>)}
               {!lg.data?.length && <li className="text-muted">Aucun e-mail enregistré pour cette commande.</li>}
             </ul>
           </div>

@@ -31,8 +31,8 @@ async function Dashboard({ searchParams }: { searchParams: Promise<{ msg?: strin
   for (const l of failed.data ?? []) { const k = `${l.order_id}|${l.kind}`; if (!last.has(k)) last.set(k, l.status as string); }
   const failedMails = [...last.values()].filter((s) => s !== "sent").length;
   const env: [string, boolean][] = [
-    ["RESEND_API_KEY", !!process.env.RESEND_API_KEY], ["RESEND_FROM", !!process.env.RESEND_FROM], ["SUMUP_API_KEY", !!process.env.SUMUP_API_KEY],
-    ["SUMUP_MERCHANT_CODE", !!process.env.SUMUP_MERCHANT_CODE], ["SUPABASE_SERVICE_ROLE_KEY", !!process.env.SUPABASE_SERVICE_ROLE_KEY], ["NEXT_PUBLIC_SITE_URL", !!process.env.NEXT_PUBLIC_SITE_URL],
+    ["Envoi d'e-mails (clé)", !!process.env.RESEND_API_KEY], ["Envoi d'e-mails (adresse expéditeur)", !!process.env.RESEND_FROM], ["Paiement (clé)", !!process.env.SUMUP_API_KEY],
+    ["Paiement (compte marchand)", !!process.env.SUMUP_MERCHANT_CODE], ["Base de données (clé)", !!process.env.SUPABASE_SERVICE_ROLE_KEY], ["Adresse du site", !!process.env.NEXT_PUBLIC_SITE_URL],
   ];
   const kpi: [string, string][] = [["Commandes payées", String(paid.count ?? 0)], ["Chiffre d'affaires", eur(revenue)], ["À préparer", String(toPrep.count ?? 0)], ["Paiements en attente", String(pending.count ?? 0)]];
   return (
@@ -49,7 +49,7 @@ async function Dashboard({ searchParams }: { searchParams: Promise<{ msg?: strin
         {(stale.count ?? 0) > 0 && <li className="flex flex-wrap items-center gap-3 rounded-xl bg-amber-50 px-4 py-3 text-amber-900">{stale.count} paiement(s) abandonné(s) depuis plus de 24 h.
           <form action={closeStalePending}><button className="underline">Clôturer (après vérification SumUp)</button></form></li>}
         {(noPrice.count ?? 0) > 0 && <li className="rounded-xl bg-amber-50 px-4 py-3 text-amber-900">{noPrice.count} produit(s) actif(s) sans prix (non achetables en ligne). <Link className="underline" href="/admin/produits">Fixer les prix</Link></li>}
-        {env.some(([, ok]) => !ok) && <li className="rounded-xl bg-red-50 px-4 py-3 text-red-800">Configuration manquante : {env.filter(([, ok]) => !ok).map(([n]) => n).join(", ")}.</li>}
+        {env.some(([, ok]) => !ok) && <li className="rounded-xl bg-red-50 px-4 py-3 text-red-800">Configuration manquante côté hébergement : {env.filter(([, ok]) => !ok).map(([n]) => n).join(", ")}.</li>}
         {!missing.length && !failedMails && !(stale.count ?? 0) && !(noPrice.count ?? 0) && env.every(([, ok]) => ok) && <li className="rounded-xl bg-green-50 px-4 py-3 text-green-800">Aucune alerte.</li>}
       </ul>
 
@@ -67,7 +67,7 @@ async function Dashboard({ searchParams }: { searchParams: Promise<{ msg?: strin
           {!orders.data?.length && <tr><td className="px-3 py-6 text-sm text-muted">Aucune commande payée.</td></tr>}
         </tbody></table>
       </div>
-      <p className="mt-6 text-xs text-muted">Variables de configuration vérifiées côté serveur (présence uniquement, jamais les valeurs).</p>
+      <p className="mt-6 text-xs text-muted">Configuration vérifiée côté serveur (présence uniquement).</p>
     </>
   );
 }

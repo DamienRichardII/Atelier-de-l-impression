@@ -23,7 +23,7 @@ async function Emails({ searchParams }: { searchParams: Promise<{ msg?: string }
         <p className="text-sm">{bad ? <span className="text-red-700">{bad} e-mail(s) dont le dernier essai a échoué.</span> : <span className="text-green-700">Tous les e-mails suivis sont partis.</span>}</p>
         {bad > 0 && <form action={retryFailedEmails}><button className="btn btn-dark">Relancer les e-mails en échec</button></form>}
       </div>
-      <p className="mb-4 max-w-2xl text-xs text-muted">« Envoyé » signifie accepté par Resend. La réception réelle (boîte du client, spam) se vérifie dans le tableau de bord Resend avec l'identifiant indiqué.</p>
+      <p className="mb-4 max-w-2xl text-xs text-muted">« Envoyé » signifie accepté par le service d'envoi. La réception réelle (boîte du client, courrier indésirable) se vérifie auprès du service d'envoi avec l'identifiant indiqué.</p>
       <div className="card overflow-x-auto">
         <table className="w-full min-w-[760px]"><thead><tr><th className={th}>Date</th><th className={th}>Type</th><th className={th}>Destinataire</th><th className={th}>Commande</th><th className={th}>Statut</th><th className={th}>Détail</th></tr></thead>
           <tbody>{rows.map((l, i) => { const ref = (l.atelier_orders as unknown as { reference?: string } | null)?.reference; return (
