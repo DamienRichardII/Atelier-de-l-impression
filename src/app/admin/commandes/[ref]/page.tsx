@@ -36,7 +36,7 @@ async function Detail({ params, searchParams }: { params: Promise<{ ref: string 
         <div className="card p-5">
           <h3 className="mb-3 font-semibold">Client</h3>
           <p className="text-sm">{c.firstName} {c.lastName}<br /><a className="underline" href={`mailto:${c.email}`}>{c.email}</a><br /><a className="underline" href={`tel:${c.phone}`}>{c.phone}</a></p>
-          <h3 className="mt-6 mb-3 font-semibold">Articles</h3>
+          <h3 className="mt-6 mb-3 flex items-center justify-between font-semibold">Articles {files.some((f) => f.length) && <a href={`/admin/logos/zip?ref=${encodeURIComponent(o.reference)}`} className="rounded-xl border border-line px-3 py-1.5 text-xs font-normal hover:border-black">Tout télécharger (.zip)</a>}</h3>
           <ul className="space-y-2 text-sm">
             {items.map((l, i) => <li key={i}><strong>{l.name}</strong> — {l.color}<br /><span className="text-muted">{Object.entries(l.sizes ?? {}).map(([s, n]) => `${s} × ${n}`).join(", ")} · {l.qty} pièce(s) · {eur(l.line_cents)}</span>
               <span className="mt-2 flex flex-wrap gap-2">

@@ -34,6 +34,7 @@ async function Logos({ searchParams }: { searchParams: Promise<{ q?: string }> }
               <Link className="font-semibold underline" href={`/admin/commandes/${o.reference}`}>{o.reference as string}</Link>
               <span className="text-sm">{c?.firstName} {c?.lastName}</span>
               <span className="text-xs text-muted">payée {dt(o.paid_at as string)} · {o.status as string}</span>
+              {items.some((x) => x.files.length) && <a href={`/admin/logos/zip?ref=${encodeURIComponent(o.reference as string)}`} className="btn btn-light ml-auto !min-h-9 text-sm">Tout télécharger (.zip)</a>}
             </header>
             <div className="space-y-5">
               {items.map(({ l, files }, i) => (

@@ -41,7 +41,7 @@ export function Notice({ msg, mail }: { msg?: string; mail?: string }) {
   );
 }
 
-const LINKS = [["/admin", "Tableau de bord"], ["/admin/commandes", "Commandes"], ["/admin/logos", "Logos commandes"], ["/admin/produits", "Prix et catalogue"], ["/admin/emails", "E-mails et alertes"]] as const;
+const LINKS = [["/admin", "Tableau de bord"], ["/admin/commandes", "Commandes"], ["/admin/logos", "Logos commandes"], ["/admin/bibliotheque", "Bibliothèque logos"], ["/admin/produits", "Prix et catalogue"], ["/admin/emails", "E-mails et alertes"]] as const;
 
 async function Nav() {
   const email = await currentAdmin();

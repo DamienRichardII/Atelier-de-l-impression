@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export type FileLink = { kind: "logo" | "preview"; label: string; url: string; thumb: boolean };
+export type FileLink = { kind: "logo" | "preview"; label: string; url: string; thumb: boolean; path: string; original: string };
 const FACE: Record<string, string> = { front: "avant", back: "dos", side: "côté", "three-quarter": "trois-quarts", left: "gauche", right: "droite" };
 
 /** Fichiers du client (logo(s) + aperçu) d'un article : stockage privé, liens signés valables 1 heure. */
@@ -18,7 +18,7 @@ export async function itemFiles(db: SupabaseClient, assetsId?: string | null): P
     out.push({
       kind: m ? "logo" : "preview",
       label: m ? `Logo — face ${FACE[m[1]] ?? m[1]}` : "Aperçu du simulateur",
-      url: s.signedUrl, thumb: /\.(png|jpe?g|webp|svg)$/i.test(f.name),
+      url: s.signedUrl, thumb: /\.(png|jpe?g|webp|svg)$/i.test(f.name), path: `${dir}/${f.name}`, original,
     });
   }
   return out.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "logo" ? -1 : 1));
