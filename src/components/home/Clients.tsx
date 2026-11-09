@@ -15,6 +15,9 @@ const clients = [
   { src: "/clients/micro3ks.png", alt: "Micro 3KS", w: 297, h: 297, cls: "h-16 sm:h-20" },
   { src: "/clients/faucon-training.png", alt: "Faucon Training", w: 1266, h: 734, cls: "h-14 sm:h-16" },
   { src: "/clients/africa2kball.png", alt: "Africa2kball", w: 500, h: 588, cls: "h-16 rounded-2xl sm:h-20" },
+  { src: "/clients/team-cut.png", alt: "Team Cut — Mixed Martial Arts", w: 298, h: 334, cls: "h-16 rounded-2xl sm:h-20" },
+  { src: "/clients/magic-clean.png", alt: "MagicClean", w: 637, h: 481, cls: "h-16 sm:h-20" },
+  { src: "/clients/groupement-union.png", alt: "Groupement Union", w: 700, h: 405, cls: "h-14 rounded-2xl sm:h-16" },
 ];
 
 function Row({ dup = false }: { dup?: boolean }) {
