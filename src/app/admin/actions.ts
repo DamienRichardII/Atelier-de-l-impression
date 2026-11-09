@@ -10,6 +10,7 @@ import { syncOrderByReference } from "@/lib/payments/sync";
 import { deliver } from "@/lib/email/log";
 import { orderPaidMails, pickupMail, type OrderForMail } from "@/lib/email/messages";
 import { confirmLink, readConfirmToken } from "@/lib/admin/confirm";
+import { readResetToken, resetLink } from "@/lib/admin/reset";
 import { esc, tpl } from "@/lib/email/send";
 import { ORDER_STATUSES } from "@/lib/admin/statuses";
 import { getProducts } from "@/lib/content/data";
@@ -69,6 +70,51 @@ export async function signup(_: { error?: string } | undefined, fd: FormData): P
     }
   }
   redirect("/admin/connexion?msg=inscription-envoyee");
+}
+
+/** Mot de passe oublié : envoie un lien de réinitialisation (valable 1 h) aux adresses autorisées. Réponse identique dans tous les cas. */
+export async function forgotPassword(_: { error?: string } | undefined, fd: FormData): Promise<{ error?: string }> {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (!rateLimit(`admin-forgot:${ip}`, 5)) return { error: "Trop de tentatives. Réessayez dans quelques minutes." };
+  const email = String(fd.get("email") ?? "").trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { error: "Adresse e-mail invalide." };
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.SUPABASE_SERVICE_ROLE_KEY; const db = supabaseAdmin();
+  if (!url || !key || !db) return { error: "Service non configuré." };
+  const { data: allowed } = await db.from("atelier_admin_emails").select("email").eq("email", email).maybeSingle();
+  if (allowed) {
+    const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+    const { data: list } = await auth.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const u = list?.users.find((x) => x.email?.toLowerCase() === email);
+    if (u) {
+      const link = resetLink(email, u.updated_at ?? "");
+      await deliver(db, null, {
+        kind: "admin_reset", to: email, subject: "Réinitialisation de votre mot de passe — L'Atelier de l'Impression",
+        html: tpl.shell("Nouveau mot de passe", `<p style="font-size:14px;line-height:1.6">Vous avez demandé à réinitialiser le mot de passe de l'administration pour <strong>${esc(email)}</strong>.</p><p style="margin:20px 0"><a href="${link}" style="background:#000;color:#fff;padding:12px 20px;border-radius:12px;text-decoration:none;font-size:14px">Choisir un nouveau mot de passe</a></p><p style="font-size:12px;color:#737373">Ce lien est valable 1 heure et ne peut servir qu'une fois. Si vous n'êtes pas à l'origine de cette demande, ignorez ce message : votre mot de passe actuel reste valable.</p>`),
+      });
+    }
+  }
+  redirect("/admin/connexion?msg=reset-envoye");
+}
+
+/** Enregistre le nouveau mot de passe depuis le lien reçu par e-mail. */
+export async function resetPassword(_: { error?: string } | undefined, fd: FormData): Promise<{ error?: string }> {
+  const ip = (await headers()).get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+  if (!rateLimit(`admin-reset:${ip}`, 8)) return { error: "Trop de tentatives. Réessayez dans quelques minutes." };
+  const tok = readResetToken(String(fd.get("t") ?? ""));
+  const password = String(fd.get("password") ?? ""); const again = String(fd.get("again") ?? "");
+  if (password.length < 10) return { error: "Le mot de passe doit contenir au moins 10 caractères." };
+  if (password !== again) return { error: "Les deux mots de passe ne correspondent pas." };
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.SUPABASE_SERVICE_ROLE_KEY; const db = supabaseAdmin();
+  if (!tok || !url || !key || !db) redirect("/admin/connexion?msg=lien-invalide");
+  const { data: allowed } = await db.from("atelier_admin_emails").select("email").eq("email", tok.email).maybeSingle();
+  if (!allowed) redirect("/admin/connexion?msg=lien-invalide");
+  const auth = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  const { data: list } = await auth.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  const u = list?.users.find((x) => x.email?.toLowerCase() === tok.email);
+  if (!u || (u.updated_at ?? "") !== tok.version) redirect("/admin/connexion?msg=lien-invalide"); // lien déjà utilisé
+  const { error } = await auth.auth.admin.updateUserById(u.id, { password, email_confirm: true });
+  if (error) return { error: "Mot de passe refusé : choisissez-en un plus solide." };
+  redirect("/admin/connexion?msg=mdp-modifie");
 }
 
 /** Confirmation du compte depuis le lien reçu par e-mail (bouton, pour résister aux scanners de liens). */

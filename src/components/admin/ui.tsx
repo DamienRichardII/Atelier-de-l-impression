@@ -26,6 +26,7 @@ const MESSAGES: Record<string, [string, "ok" | "bad"]> = {
   "compte-confirme": ["Compte confirmé. Vous pouvez vous connecter.", "ok"], "lien-invalide": ["Ce lien est invalide ou expiré. Refaites une demande de création de compte.", "bad"],
   "produit-ajoute": ["Produit publié : il apparaît dans le simulateur et sur l'accueil.", "ok"], "produit-retire": ["Produit retiré du site.", "ok"],
   "galerie-ok": ["Photos ajoutées à la galerie.", "ok"], "photo-retiree": ["Photo retirée.", "ok"], "cover-retiree": ["Photo de couverture retirée.", "ok"],
+  "reset-envoye": ["Si cette adresse est autorisée, un e-mail pour choisir un nouveau mot de passe vient d'être envoyé (valable 1 heure).", "ok"], "mdp-modifie": ["Mot de passe modifié. Vous pouvez vous connecter.", "ok"],
   "sync-ok": ["Paiement relu chez SumUp.", "ok"], "sync-echec": ["SumUp n'a pas répondu.", "bad"],
 };
 export function Notice({ msg, mail }: { msg?: string; mail?: string }) {
