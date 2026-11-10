@@ -193,6 +193,20 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
   },
   {
+    id: "veste-polaire", family: "Vestes polaires", name: "Veste polaire",
+    description: "Veste polaire moderne à grand zip. 2 poches zippées sur les côtés. Zip principal et zips de poches contrastés. Polaire 300 g/m².",
+    colors: [
+      { name: "Noir", hex: "#1A1617", photos: ph("veste-polaire", "noir", ["front", "back"]) },
+      { name: "Gris", hex: "#5A5A58", photos: ph("veste-polaire", "gris", ["front", "back"]) },
+      { name: "Rouge", hex: "#9D041F", photos: ph("veste-polaire", "rouge", ["front", "back"]) },
+      { name: "Bleu roi", hex: "#1C5A9A", photos: ph("veste-polaire", "bleu-roi", ["front", "back"]) },
+      { name: "Orange", hex: "#FB6903", photos: ph("veste-polaire", "orange", ["front", "back"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 27, maxZoom: 1.5,
+    // Face : cœur de poitrine (le zip coupe la face en deux). Dos : grande zone.
+    faces: { front: { x: 54.5, y: 29, w: 13, h: 9 }, back: { x: 29, y: 30, w: 42, h: 36 } },
+  },
+  {
     id: "bonnet", family: "Casquettes & bonnets", name: "Bonnet",
     description: "Bonnet Thinsulate™ avec patch amovible : tissu double épaisseur, empiècement coton sergé Rip-Strip™ interchangeable (compatible patchs BF600). 100 % acrylique Soft-Touch, doublure Thinsulate™ 65 % polypropylène, 35 % polyester.",
     colors: [
