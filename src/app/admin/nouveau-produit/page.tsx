@@ -24,7 +24,7 @@ async function Page_({ searchParams }: { searchParams: Promise<{ msg?: string }>
         {mine.map((p) => (
           <li key={p.id} className="card flex items-center gap-3 p-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={Object.values(p.colors[0]?.photos ?? {})[0]} alt="" className="h-16 w-16 shrink-0 rounded-xl bg-mist object-contain" />
+            <img src={p.colors[0]?.photos?.front ?? Object.values(p.colors[0]?.photos ?? {})[0]} alt="" className="h-16 w-16 shrink-0 rounded-xl bg-mist object-contain" />
             <div className="min-w-0 flex-1"><p className="truncate font-medium">{p.name}</p><p className="truncate text-xs text-muted">{p.family} · {p.colors.length} couleur(s)</p></div>
             <form action={removeProduct}><input type="hidden" name="id" value={p.id} /><button className="min-h-10 rounded-lg border border-line px-3 text-sm text-red-700 hover:border-red-700">Retirer</button></form>
           </li>

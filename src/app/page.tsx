@@ -27,10 +27,14 @@ async function ProductGrid() {
       {products.map((p) => (
         <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
           {(() => {
-            const src = Object.values(p.colors[0].photos ?? {})[0];
+            const photos = p.colors[0].photos ?? {};
+                const src = photos.front ?? Object.values(photos)[0];
             return src ? (
               <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
-                <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
+                {src.startsWith("/")
+                      ? <Image src={src} alt={p.name} fill sizes="(max-width: 768px) 45vw, 25vw" className="object-contain p-2" />
+                      // eslint-disable-next-line @next/next/no-img-element
+                      : <img src={src} alt={p.name} loading="lazy" className="absolute inset-0 h-full w-full object-contain p-2" />}
               </div>
             ) : (
               <div className="grid aspect-square place-items-center rounded-xl bg-mist text-xs text-muted">Photo à fournir</div>
