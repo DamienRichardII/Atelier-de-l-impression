@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Download, Eraser, Move, RotateCcw, Trash2, Upload, ZoomIn, ZoomOut, Moon, Sun, Grid2x2 } from "lucide-react";
-import { formatPriceFrom, type Face, type ProductConfig } from "@/config/products";
+import { defaultColor, formatPriceFrom, type Face, type ProductConfig } from "@/config/products";
 import type { LogoPlacement } from "@/lib/customization/types";
 import { loadLogoFile, removeWhiteBackground } from "@/lib/customization/svg";
 import type { PreviewHandle } from "./PreviewStage";
@@ -40,9 +40,9 @@ export function Simulator({ products }: { products: ProductConfig[] }) {
   const [productId, setProductId] = useState(initial.id);
   const product = products.find((p) => p.id === productId)!;
   const familyItems = products.filter((p) => p.family === product.family);
-  const [color, setColor] = useState(product.colors[0]);
+  const [color, setColor] = useState(defaultColor(product));
   const [face, setFace] = useState<Face>(
-    (Object.keys(initial.faces).find((f) => !initial.colors[0].photos || initial.colors[0].photos[f as Face]) as Face) ?? "front",
+    (Object.keys(initial.faces).find((f) => !defaultColor(initial).photos || defaultColor(initial).photos![f as Face]) as Face) ?? "front",
   );
   const [logos, setLogos] = useState<Partial<Record<Face, LogoPlacement>>>({});
   const [dark, setDark] = useState(false);
@@ -65,7 +65,7 @@ export function Simulator({ products }: { products: ProductConfig[] }) {
 
   const pickProduct = (id: string) => {
     const p = products.find((x) => x.id === id)!;
-    setProductId(id); setColor(p.colors[0]); setFace((Object.keys(p.faces).find((f) => !p.colors[0].photos || p.colors[0].photos[f as Face]) as Face) ?? "front"); setLogos({}); setOriginals({}); setZoom(1);
+    setProductId(id); const dc = defaultColor(p); setColor(dc); setFace((Object.keys(p.faces).find((f) => !dc.photos || dc.photos[f as Face]) as Face) ?? "front"); setLogos({}); setOriginals({}); setZoom(1);
   };
 
   const onFile = useCallback(async (f?: File) => {

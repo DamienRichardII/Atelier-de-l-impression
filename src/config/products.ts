@@ -22,6 +22,8 @@ export interface ProductConfig {
   description?: string;
   /** Zone imprimable par vue. `null` = vue de présentation (pas de placement de logo). */
   faces: Partial<Record<Face, PrintZone | null>>;
+  /** Couleur mise en avant (vignette de l'accueil et couleur d'ouverture du simulateur). Absent = 1re couleur. */
+  cover?: string;
   /** Zoom max cohérent avec la résolution réelle des photos (au-delà : pixellisation). */
   maxZoom?: number;
   price: number | null;
@@ -36,12 +38,16 @@ const ph = (dir: string, c: string, faces: Face[]) =>
 const pv = (dir: string, faces: Face[]) =>
   Object.fromEntries(faces.map((f) => [f, `/products/${dir}/${f}.webp`])) as Partial<Record<Face, string>>;
 
+/** Couleur d'ouverture d'un produit : sa couleur « vitrine », sinon la première. */
+export const defaultColor = (p: ProductConfig): ColorOption =>
+  p.colors.find((c) => c.name === p.cover) ?? p.colors[0];
+
 export const formatPriceFrom = (n: number) =>
   `À partir de ${new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n)}`;
 
 export const products: ProductConfig[] = [
   {
-    id: "t-shirt", family: "T-shirts", name: "T-shirt Unisex",
+    id: "t-shirt", cover: "Rouge", family: "T-shirts", name: "T-shirt Unisex",
     description: "T-shirt col rond lycra, manches courtes, 190-200 g/m².",
     colors: [
       { name: "Noir", hex: "#111111", photos: ph("t-shirt", "noir", ["front", "back", "left", "right"]) },
@@ -57,7 +63,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 24, w: 32, h: 30 }, back: { x: 33, y: 20, w: 34, h: 38 }, left: { x: 34, y: 19, w: 18, h: 21 }, right: { x: 40, y: 19, w: 18, h: 21 } },
   },
   {
-    id: "t-shirt-oversize", family: "T-shirts", name: "T-shirt ample 220 g",
+    id: "t-shirt-oversize", cover: "Blanc", family: "T-shirts", name: "T-shirt ample 220 g",
     description: "T-shirt col rond, manches courtes, 220 g/m², coupe ample.",
     colors: [
       { name: "Blanc", hex: "#EAEAEA", photos: ph("t-shirt-oversize", "blanc", ["front"]) },
@@ -67,7 +73,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 25, w: 32, h: 28 } },
   },
   {
-    id: "t-shirt-chicago", family: "T-shirts", name: "T-shirt Chicago",
+    id: "t-shirt-chicago", cover: "Camel", family: "T-shirts", name: "T-shirt Chicago",
     description: "Chicago : t-shirt oversize col rond, coton, manches courtes, 240 g/m².",
     colors: [
       { name: "Naturel", hex: "#EEEDE9", photos: ph("t-shirt-chicago", "naturel", ["front"]) },
@@ -84,7 +90,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 34, y: 27, w: 32, h: 26 } },
   },
   {
-    id: "capuche-320", family: "Sweats à capuche", name: "Sweat à capuche 320 g",
+    id: "capuche-320", cover: "Bleu roi", family: "Sweats à capuche", name: "Sweat à capuche 320 g",
     description: "Sweat à capuche manches longues, poche kangourou, capuche doublée, cordon de serrage ton sur ton finition métal. 70 % coton, 30 % polyester, molleton 320 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#222222", photos: ph("capuche-320", "noir", ["front"]) },
@@ -104,7 +110,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 32, y: 36, w: 34, h: 22 }, back: { x: 30, y: 38, w: 40, h: 36 } },
   },
   {
-    id: "capuche-zip", family: "Sweats à capuche", name: "Sweat zippé à capuche 320 g",
+    id: "capuche-zip", cover: "Bordeaux", family: "Sweats à capuche", name: "Sweat zippé à capuche 320 g",
     description: "Sweat à capuche zippé manches longues, 2 poches latérales, capuche doublée, cordon de serrage ton sur ton, fermeture éclair YKK. 70 % coton peigné, 30 % polyester, molleton 320 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#1E1E1E", photos: ph("capuche-zip", "noir", ["front", "back"]) },
@@ -119,7 +125,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 56, y: 24, w: 14, h: 10 }, back: { x: 26.5, y: 39.5, w: 46.5, h: 38 } },
   },
   {
-    id: "sweat-320", family: "Sweats col rond", name: "Sweat col rond 320 g",
+    id: "sweat-320", cover: "Bordeaux", family: "Sweats col rond", name: "Sweat col rond 320 g",
     description: "Sweat-shirt col rond avec bande de propreté, sans étiquette. 70 % coton, 30 % polyester, molleton 320 g/m². Tailles adultes XS à 2XL.",
     colors: [
       { name: "Noir", hex: "#1B1B1B", photos: ph("sweat-320", "noir", ["front", "back"]) },
@@ -133,7 +139,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 35, y: 28, w: 30, h: 19 }, back: { x: 33, y: 30, w: 34, h: 34 } },
   },
   {
-    id: "polo", family: "Polo", name: "Polo",
+    id: "polo", cover: "Bleu azur", family: "Polo", name: "Polo",
     description: "Polo manches courtes en maille piquée, deux rayures en relief au col, fentes latérales, bouton ton sur ton. 100 % coton, 210-220 g/m², sans étiquette.",
     colors: [
       { name: "Noir", hex: "#111111", photos: pv("polo", ["front", "back", "side", "three-quarter"]) },
@@ -146,7 +152,7 @@ export const products: ProductConfig[] = [
 
   },
   {
-    id: "casquette", family: "Casquettes & bonnets", name: "Casquette 5 pans",
+    id: "casquette", cover: "Rouge", family: "Casquettes & bonnets", name: "Casquette 5 pans",
     description: "Casquette 5 pans : panneau avant structuré, visière préformée en polyéthylène recyclé, fermeture ajustable par boucle métal, œillets de ventilation. Tour de tête 58 cm.",
     colors: [
       { name: "Noir", hex: "#1F1F21", photos: ph("casquette", "noir", ["front", "back"]) },
@@ -165,7 +171,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "casquette-patch", family: "Casquettes & bonnets", name: "Casquette à patch",
+    id: "casquette-patch", cover: "Vert militaire", family: "Casquettes & bonnets", name: "Casquette à patch",
     description: "Casquette 5 pans avec patch amovible : visière pré-courbée, empiècement dos en Rip-Strip™, œillets cousus, ajustable par patte, étiquette détachable. Compatible patchs BF841 et BF600. Tour de tête 58 cm.",
     colors: [
       { name: "Noir", hex: "#1F1F1F", photos: ph("casquette-patch", "noir", ["front", "back"]) },
@@ -178,7 +184,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "gilet", family: "Gilet softshell", name: "Gilet softshell",
+    id: "gilet", cover: "Bleu roi", family: "Gilet softshell", name: "Gilet softshell",
     description: "Bodywarmer softshell 3 couches : tissu contrecollé avec membrane respirante et imperméable. 2 poches zippées latérales, 1 poche poitrine. Respirabilité jusqu'à 14 232 g/m²/24h, imperméabilité jusqu'à 8 173 mmH₂O.",
     colors: [
       { name: "Noir", hex: "#111111", photos: pv("gilet", ["front", "back"]) },
@@ -193,7 +199,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 54, y: 31, w: 14, h: 12 }, back: { x: 33, y: 30, w: 34, h: 30 } },
   },
   {
-    id: "veste-polaire", family: "Vestes polaires", name: "Veste polaire",
+    id: "veste-polaire", cover: "Orange", family: "Vestes polaires", name: "Veste polaire",
     description: "Veste polaire moderne à grand zip. 2 poches zippées sur les côtés. Zip principal et zips de poches contrastés. Polaire 300 g/m².",
     colors: [
       { name: "Noir", hex: "#1A1617", photos: ph("veste-polaire", "noir", ["front", "back"]) },
@@ -207,7 +213,7 @@ export const products: ProductConfig[] = [
     faces: { front: { x: 54.5, y: 29, w: 13, h: 9 }, back: { x: 29, y: 30, w: 42, h: 36 } },
   },
   {
-    id: "bonnet", family: "Casquettes & bonnets", name: "Bonnet",
+    id: "bonnet", cover: "Vert militaire", family: "Casquettes & bonnets", name: "Bonnet",
     description: "Bonnet Thinsulate™ avec patch amovible : tissu double épaisseur, empiècement coton sergé Rip-Strip™ interchangeable (compatible patchs BF600). 100 % acrylique Soft-Touch, doublure Thinsulate™ 65 % polypropylène, 35 % polyester.",
     colors: [
       { name: "Noir", hex: "#1C1C1C", photos: ph("bonnet", "noir", ["three-quarter"]) },
@@ -220,7 +226,7 @@ export const products: ProductConfig[] = [
   },
 
   {
-    id: "tablier", family: "Tablier", name: "Tablier à bavette",
+    id: "tablier", cover: "Jaune", family: "Tablier", name: "Tablier à bavette",
     description: "Tablier à bavette avec poche, 100 % coton, encolure arrondie, boucle plastique pour ajuster la bretelle. Hauteur 90 cm, largeur 75 cm. Lavage à 60 °C.",
     colors: [
       { name: "Noir", hex: "#2E2E2E", photos: ph("tablier", "noir", ["front"]) },

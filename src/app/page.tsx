@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { Clients } from "@/components/home/Clients";
 import { Suspense } from "react";
-import { formatPriceFrom } from "@/config/products";
+import { defaultColor, formatPriceFrom } from "@/config/products";
 import { getProducts } from "@/lib/content/data";
 
 const steps = [
@@ -27,7 +27,7 @@ async function ProductGrid() {
       {products.map((p) => (
         <Link key={p.id} href={`/personnalisation?produit=${p.id}`} className="card group p-4 transition hover:-translate-y-1 hover:border-black">
           {(() => {
-            const photos = p.colors[0].photos ?? {};
+            const photos = defaultColor(p).photos ?? {};
                 const src = photos.front ?? Object.values(photos)[0];
             return src ? (
               <div className="relative aspect-square overflow-hidden rounded-xl bg-mist">
