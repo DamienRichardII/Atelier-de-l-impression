@@ -1,7 +1,7 @@
 "use server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { clearSession, requireAdmin, setSession } from "@/lib/admin/session";
@@ -150,7 +150,7 @@ export async function saveProduct(fd: FormData) {
   const active = fd.get("active") === "on";
   const purchasable = fd.get("purchasable") === "on" && active && price_cents !== null; // pas d'achat sans prix
   const { error } = await db.from("atelier_products").update({ price_cents, price_both_cents, active, purchasable }).eq("id", id);
-  revalidatePath("/admin/produits");
+  revalidatePath("/admin/produits"); updateTag("site-content"); // le prix affiché sur le site suit la base
   redirect(`/admin/produits?msg=${error ? "erreur" : "ok"}`);
 }
 
@@ -172,7 +172,7 @@ export async function saveCategory(fd: FormData) {
   if (!Object.keys(patch).length) redirect("/admin/produits?msg=prix-invalide");
   const { error } = await db.from("atelier_products").update(patch).in("id", ids);
   if (!error && patch.price_cents) await db.from("atelier_products").update({ purchasable: true }).in("id", ids).eq("active", true);
-  revalidatePath("/admin/produits");
+  revalidatePath("/admin/produits"); updateTag("site-content"); // le prix affiché sur le site suit la base
   redirect(`/admin/produits?msg=${error ? "erreur" : "ok"}`);
 }
 
@@ -186,7 +186,7 @@ export async function syncCatalog() {
   const known = new Set(catalog.map((p) => p.id));
   const stale = [...have].filter((id) => !known.has(id));
   if (stale.length) await db.from("atelier_products").update({ active: false, purchasable: false }).in("id", stale);
-  revalidatePath("/admin/produits");
+  revalidatePath("/admin/produits"); updateTag("site-content");
   redirect(`/admin/produits?msg=sync-${missing.length}-${stale.length}`);
 }
 

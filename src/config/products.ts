@@ -43,7 +43,7 @@ export const defaultColor = (p: ProductConfig): ColorOption =>
   p.colors.find((c) => c.name === p.cover) ?? p.colors[0];
 
 export const formatPriceFrom = (n: number) =>
-  `À partir de ${new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(n)}`;
+  `À partir de ${new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n)}`;
 
 export const products: ProductConfig[] = [
   {

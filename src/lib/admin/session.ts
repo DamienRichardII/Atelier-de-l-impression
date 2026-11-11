@@ -1,5 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
@@ -31,6 +32,7 @@ export async function clearSession() { (await cookies()).delete(COOKIE); }
 
 /** E-mail de l'administrateur connecté, ou null. Revérifie la liste d'accès à chaque requête. */
 export async function currentAdmin(): Promise<string | null> {
+  await connection(); // dépend de l'heure : jamais calculé au prérendu
   const email = readToken((await cookies()).get(COOKIE)?.value);
   if (!email) return null;
   const db = supabaseAdmin(); if (!db) return null;

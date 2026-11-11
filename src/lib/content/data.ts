@@ -22,7 +22,20 @@ export async function getCustomProducts(): Promise<ProductConfig[]> {
   return ((data ?? []) as CustomProductRow[]).map(toConfig);
 }
 /** Catalogue complet : produits du site + produits ajoutés par l'atelier. */
-export async function getProducts(): Promise<ProductConfig[]> { return [...products, ...(await getCustomProducts())]; }
+export async function getProducts(): Promise<ProductConfig[]> {
+  const [custom, prices] = await Promise.all([getCustomProducts(), getCatalogPrices()]);
+  // Le prix « à partir de » affiché sur le site suit toujours le prix recto saisi dans l'admin.
+  return [...products, ...custom].map((p) => (prices[p.id] ? { ...p, priceFrom: prices[p.id] } : p));
+}
+
+/** Prix recto (€) saisis dans l'admin, pour les produits actifs. */
+async function getCatalogPrices(): Promise<Record<string, number>> {
+  "use cache";
+  cacheTag("site-content"); cacheLife("minutes");
+  const db = supabaseAdmin(); if (!db) return {};
+  const { data } = await db.from("atelier_products").select("id, price_cents").eq("active", true).gt("price_cents", 0);
+  return Object.fromEntries((data ?? []).map((r) => [r.id as string, (r.price_cents as number) / 100]));
+}
 
 export async function getGallery(): Promise<(Realisation & { id?: string })[]> {
   "use cache";
