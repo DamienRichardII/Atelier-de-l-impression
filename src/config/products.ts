@@ -261,7 +261,18 @@ export const products: ProductConfig[] = [
     colors: [{ name: "Noir", hex: "#111111", photos: pv("pantalon", ["front", "back", "side", "three-quarter"]) }],
     sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 20, maxZoom: 1.5,
     faces: { front: { x: 35, y: 33, w: 12, h: 14 }, side: { x: 42, y: 24, w: 16, h: 18 }, back: { x: 36, y: 30, w: 28, h: 14 }, "three-quarter": null },
-
+  },
+  {
+    id: "pantalon-trekking", cover: "Beige", family: "Pantalon", name: "Pantalon de trekking stretch",
+    description: "Pantalon de trekking stretch. Fermeture à bouton avec braguette zippée. Coupe extra-slim. Ceinture élastiquée sur les côtés. Double couture de sécurité. 6 poches : 2 poches italiennes, 1 poche à rabat et bouton-pression sur la jambe droite, 1 poche à zip inversé sur la jambe gauche, 2 poches arrière à zip inversé.",
+    colors: [
+      { name: "Beige", hex: "#A38B69", photos: ph("pantalon-trekking", "beige", ["front", "back"]) },
+      { name: "Gris", hex: "#53575A", photos: ph("pantalon-trekking", "gris", ["front", "back"]) },
+      { name: "Marine", hex: "#2F314D", photos: ph("pantalon-trekking", "marine", ["front", "back"]) },
+    ],
+    sizes: ["S", "M", "L", "XL", "XXL"], price: null, priceFrom: 35, maxZoom: 1.3,
+    // Face : cuisse gauche (au-dessus de la poche à rabat). Dos : mollet.
+    faces: { front: { x: 38, y: 24.5, w: 9, h: 12 }, back: { x: 36.5, y: 62, w: 11, h: 12 } },
   },
 ];
 
