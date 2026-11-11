@@ -22,7 +22,8 @@ export function Footer() {
             <p className="mt-3 text-sm text-white/80">
               {site.address || `${site.postalCode} ${site.city}`}
             </p>
-            {site.phone && <p className="mt-1 text-sm text-white/80">{site.phone}</p>}
+            {site.phone && <p className="mt-1 text-sm"><a href={`tel:${site.phone.replace(/\s/g, "")}`} className="text-white/80 hover:text-white">{site.phone}</a></p>}
+            <p className="mt-1 text-sm"><a href={site.whatsapp.url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white">WhatsApp {site.whatsapp.label}</a></p>
             {site.email && <p className="mt-1 text-sm"><a href={`mailto:${site.email}`} className="text-white/80 hover:text-white">{site.email}</a></p>}
             <p className="mt-1 text-sm"><a href={site.instagram.url} target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-white">Instagram {site.instagram.handle}</a></p>
             <ul className="mt-4 space-y-0.5 text-xs text-white/60">
