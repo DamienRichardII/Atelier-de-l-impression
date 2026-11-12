@@ -17,6 +17,7 @@ const clients = [
   { src: "/clients/africa2kball.png", alt: "Africa2kball", w: 500, h: 588, cls: "h-16 rounded-2xl sm:h-20" },
   { src: "/clients/team-cut.png", alt: "Team Cut — Mixed Martial Arts", w: 298, h: 334, cls: "h-16 rounded-2xl sm:h-20" },
   { src: "/clients/magic-clean.png", alt: "MagicClean", w: 637, h: 481, cls: "h-16 sm:h-20" },
+  { src: "/clients/fumier.png", alt: "FUMIER", w: 790, h: 133, cls: "h-7 sm:h-9" },
   { src: "/clients/groupement-union.png", alt: "Groupement Union", w: 700, h: 405, cls: "h-14 rounded-2xl sm:h-16" },
 ];
 

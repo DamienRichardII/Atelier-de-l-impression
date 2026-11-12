@@ -26,6 +26,7 @@ export function Hero() {
           <Link href="/personnalisation" className="btn btn-dark w-full sm:w-auto">
             <Shirt size={18} /> Personnaliser un produit
           </Link>
+          <p className="mt-3 text-center text-sm font-medium tracking-wide text-muted sm:text-base">Impression DTF haute qualité</p>
         </motion.div>
       </div>
     </section>
