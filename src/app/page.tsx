@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Hero } from "@/components/home/Hero";
 import { Clients } from "@/components/home/Clients";
+import { BlackFridayBanner } from "@/components/home/BlackFridayBanner";
 import { Suspense } from "react";
 import { defaultColor, formatPriceFrom } from "@/config/products";
 import { getProducts } from "@/lib/content/data";
@@ -53,6 +54,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <BlackFridayBanner />
       <Clients />
 
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6" aria-labelledby="produits">
