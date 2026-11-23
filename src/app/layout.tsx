@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
@@ -34,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
-        <BlackFridayPopup />
+        <Suspense fallback={null}><BlackFridayPopup /></Suspense>
       </body>
     </html>
   );
